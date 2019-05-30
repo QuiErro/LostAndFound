@@ -69,7 +69,7 @@
       },
       goQQ(){
         MessageBox.confirm('确定前往失物招领QQ群?').then(action => {
-          window.location.href = "https://jq.qq.com/?_wv=1027&k=5cIwt20";
+          window.location.href = "https://jq.qq.com/?_wv=1027&k=5yTlPRo";
         });
       },
       logout(){
