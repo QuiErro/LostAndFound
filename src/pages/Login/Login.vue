@@ -108,6 +108,10 @@
              // 同步本地用户数据
             this.syncUserInfo(this.userInfo);
             this.$router.replace('/home');
+            this.email = '';
+            this.code = null;
+            this.student_id = '';
+            this.password = '';
           }
         }
       },

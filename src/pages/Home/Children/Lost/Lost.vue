@@ -2,18 +2,25 @@
   <yd-pullrefresh :callback="loadNewList" ref="pullrefreshDemo">
     <div id="prop-list">
       <div class="cards-collection" v-if="isShowCardCollection">
-        <img src="./image/large-loading.svg">
+        <yd-slider autoplay="2000" speed="500">
+            <yd-slider-item>
+              <img src="./../../image/lunbo2.jpg">
+            </yd-slider-item>
+            <yd-slider-item>
+              <img src="./../../image/lunbo3.jpg">
+            </yd-slider-item>
+        </yd-slider>
       </div>
       <div class="goods-list"  v-if="showContent.length">
         <ul class="mui-table-view">
           <li class="mui-table-view-cell mui-media" v-for="(obj, index) in showContent" :key="index">
             <a @click="goGoodsDetail(obj)">
-              <img class="mui-media-object mui-pull-left" :src="'http://47.112.10.160:3389/image/'+obj.picture" v-if="obj.picture">
+              <img class="mui-media-object mui-pull-left" :src="obj.picture_b64" v-if="obj.picture_b64">
               <div class="mui-media-body">
                 <h1>{{obj.name}}</h1>
                 <p class='mui-ellipsis'>
-                  <span>丢失时间：{{obj.lost_time}}</span>
-                  <span>丢失地点：{{obj.lost_place}}</span>
+                  <span>丢失时间：{{obj.time}}</span>
+                  <span>丢失地点：{{obj.place}}</span>
                   <span class="post-time">{{obj.create_time}}</span>
                 </p>
               </div>
@@ -102,10 +109,14 @@
   flex-direction: column;
 
   .cards-collection{
-    padding: 10px 5px;
-    img{
-      width: 100%;
+    padding: 10px 16px;
+    height: 160px;
+    .yd-slider{
       height: 100%;
+      img{
+        width: 100%;
+        height: 100%;
+      }
     }
   }
   .goods-list{

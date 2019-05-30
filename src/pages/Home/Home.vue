@@ -64,8 +64,14 @@
       this.reqLost();
       this.reqFound();
     },
+    watch: {
+      userInfo(){
+        this.reqUserLostPost(this.userInfo.user_id);
+        this.reqUserFoundPost(this.userInfo.user_id);
+      }
+    },
     methods: {
-      ...mapActions(['reqFound', 'reqLost']),
+      ...mapActions(['reqFound', 'reqLost','reqUserLostPost', 'reqUserFoundPost']),
       // 修改物品类型
       selectPropType(props) {
         this.prop_type = props.name;

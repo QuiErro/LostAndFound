@@ -11,7 +11,7 @@
         <yd-cell-group>
           <yd-cell-item>
             <span slot="left">当前经纬度:</span>
-            <yd-input slot="right" :show-success-icon="false" :show-error-icon="false" id="LatlngMsg" disabled :value="latlngStr" style="margin-bottom: 10px;"></yd-input>
+            <yd-input slot="right" :show-success-icon="false" :show-error-icon="false" id="LatlngMsg" disabled :value="latlngStr" style="margin-bottom: 10px;padding: 10px 5px;"></yd-input>
           </yd-cell-item>
         </yd-cell-group>
         <yd-button type="hollow" @click.native="selectLngLat" :disabled="$route.path.includes('/viewmap')">确定坐标</yd-button>
@@ -65,7 +65,7 @@
 	    baiduMap () {
         var map = new BMap.Map('allmap');
         var point = new BMap.Point(this.lng, this.lat);
-				map.centerAndZoom(point, 16);
+				map.centerAndZoom(point, 17);
 				map.addControl(new BMap.MapTypeControl({
 					mapTypes: [
 						BMAP_NORMAL_MAP,
@@ -83,8 +83,8 @@
             map.clearOverlays(marker);
             marker =new BMap.Marker(e.point)// 创建标注
             map.addOverlay(marker)// 将标注添加到地图中
-            this.lng = e.point.lng.toFixed(3);
-            this.lat = e.point.lat.toFixed(3);
+            this.lng = e.point.lng;
+            this.lat = e.point.lat;
           }
 				/**
          * if(marker2){
@@ -156,8 +156,9 @@
       }
     }
   }
-  input[type=text]{
+  .mui-input{
     margin-bottom: 10px !important;
+    padding: 10px 1px !important;
   }
 }
 </style>

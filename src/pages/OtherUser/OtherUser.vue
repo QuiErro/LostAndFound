@@ -1,7 +1,7 @@
 <template>
   <div class="other-user">
     <!-- 顶部 Header 区域 -->
-    <mt-header fixed title="XX的主页">
+    <mt-header fixed :title="`${otherusername}的主页`">
       <span slot="left" @click="goBack">
         <mt-button icon="back"></mt-button>
       </span>
@@ -10,9 +10,9 @@
       <ul class="mui-table-view">
         <li class="mui-table-view-cell mui-media">
           <a>
-            <img class="mui-media-object mui-pull-left" src="./image/small-loading.svg">
+            <img class="mui-media-object mui-pull-left" src="./image/user.jpg">
             <div class="mui-media-body">
-              <h1>用户名</h1>
+              <h1>{{otherusername}}</h1>
               <p class='mui-ellipsis'>
                 <span><i class="mui-icon mui-icon-email"></i>私信ta</span>
               </p>
@@ -21,36 +21,29 @@
         </li>
       </ul>
     </div>
-    <div class="user-post-list">
-      <h3>ta的发布</h3>
-      <mt-loadmore :bottom-method="loadBottom" ref="loadmore" :bottomDistance="30" bottomPullText="上拉加载更多">
-        <ul class="mui-table-view">
-          <li class="mui-table-view-cell mui-media" v-for="index in 3" :key="index">
-            <router-link to="/goods">
-              <img class="mui-media-object mui-pull-left" src="./image/small-loading.svg">
-              <div class="mui-media-body">
-                <h1>校园卡03180000</h1>
-                <p class='mui-ellipsis'>
-                  <span>丢失时间：2019-05-19</span>
-                  <span>丢失地点：西三教学楼</span>
-                  <span class="post-time">2019-05-19</span>
-                </p>
-              </div>
-            </router-link>
-          </li>
-        </ul>
-      </mt-loadmore>
-    </div>
+    <router-link to="/userfoundpost" tag="div" class="options">
+      <h3>ta发布的失物招领</h3>
+      <span><i class="mui-icon mui-icon-forward"></i></span>
+    </router-link>
+    <router-link to="/userlostpost" tag="div" class="options">
+      <h3>ta发布的寻物启事</h3>
+      <span><i class="mui-icon mui-icon-forward"></i></span>
+    </router-link>
   </div>
 </template>
 
 <script>
+  import {mapState} from 'vuex';
+  import {mapActions} from 'vuex'
 
   export default {
     name: "OtherUser",
     data() {
       return {
       }
+    },
+    computed:{
+      ...mapState(['otherusername'])
     },
     methods: {
       goBack() {
@@ -139,6 +132,7 @@
     }
     .user-post-list{
       padding: 15px 10px 0;
+      height: 58%;
       h3{
         font-weight: lighter;
         font-size: 18px;
@@ -195,6 +189,34 @@
             }
           }
         }
+      }
+    }
+    .options{
+      border-top: 1px solid #D4D4D4;
+      border-bottom: 1px solid #D4D4D4;
+      padding: 5px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      h3{
+        font-size: 18px;
+        font-weight: lighter;
+      }
+      i{
+        color: #7F7F7F;
+      }
+    }
+    .logout-btn{
+      text-align: center;
+      margin: 60px 0 ;
+      .mint-button{
+        border-radius: 5px;
+       /**
+	    color: #333;
+        background: rgba(2, 167, 240, 0.505882352941176);
+		*/
+		color: #fff;
+        width: 120px;
       }
     }
   }

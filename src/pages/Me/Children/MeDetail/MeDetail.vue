@@ -7,48 +7,77 @@
       </span>
     </mt-header>
     <div class="me-photo">
-      <img src="./image/small-loading.svg">
+      <img src="./../../image/user.jpg">
     </div>
     <div class="options-content">
       <div class="options">
         <span>用户名</span>
-        <span><input type="text" placeholder="xxxxx"></span>
-      </div>
-      <div class="options">
-        <span>邮箱</span>
-        <span><input type="text" :placeholder="userInfo.email"></span>
-      </div>
-      <div class="options">
-        <span>手机</span>
-        <span><input type="text" :placeholder="userInfo.phone || '未绑定' "></span>
+        <span><input type="text" v-model="username"></span>
       </div>
       <div class="options">
         <span>绑定学号</span>
-        <span><input type="text" :placeholder="userInfo.student_id || '未绑定' "></span>
+        <span><input type="text" v-model="student_id"></span>
       </div>
+     <!-- <div class="options">
+        <span>手机</span>
+        <span><input type="text" :placeholder="userInfo.phone || '未开放' " disabled></span>
+      </div> -->
     </div>
-    <div class="post-btn"><mt-button type="danger" size="small">修改资料</mt-button></div>
+    <div class="post-btn"><mt-button type="danger" size="small" @click="editUserInfo">修改资料</mt-button></div>
   </div>
 </template>
 
 <script>
+  import {userEdit} from './../../../../api/index';
   import { MessageBox } from 'mint-ui';
   import {mapState} from 'vuex';
+  import {mapActions} from 'vuex'
 
   export default {
     name: "MeDetail",
     data() {
       return {
+        username: '',
+        student_id: ''
       }
     },
     computed:{
       ...mapState(['userInfo'])
     },
+    mounted(){
+      this.username = this.userInfo.username;
+      this.student_id = this.userInfo.student_id || '未绑定';
+    },
+    watch:{
+      userInfo(){
+        this.username = this.userInfo.username;
+        this.student_id = this.userInfo.student_id || '未绑定';
+      }
+    },
     methods: {
+      ...mapActions(['syncUserInfo']), // 同步本地存储的用户信息
       goBack() {
         // 点击后退
         this.$router.go(-1);
       },
+      async editUserInfo(){
+        const result  = await userEdit(this.username, this.student_id);
+        if(result.error_code === 0){
+          this.$dialog.toast({
+            mes: '修改成功',
+            icon: 'success',
+            timeout: 1000
+          });
+          this.syncUserInfo(result.data);
+          this.$router.replace('/me');
+        }else{
+          this.$dialog.toast({
+            mes: result.error_msg,
+            icon: 'error',
+            timeout: 1000
+          });
+        }
+      }
     }
   }
 </script>
@@ -74,8 +103,8 @@
       justify-content: center;
       align-items: center;
       img{
-        width: 25%;
-        height: 55%;
+        width: 87px;
+        height: 87px;
         border-radius: 50%;
       }
     }

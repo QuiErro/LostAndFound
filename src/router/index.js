@@ -16,8 +16,13 @@ const Register = ()=> import('./../pages/Register/Register');
 import Found from '../pages/Home/Children/Found/Found'
 import Lost from '../pages/Home/Children/Lost/Lost'
 import MeDetail from '../pages/Me/Children/MeDetail/MeDetail'
-import MyPost from '../pages/Me/Children/MyPost/MyPost'
-import MyPostGoods from '../pages/Me/Children/MyPostGoods/MyPostGoods'
+import MyLostPost from '../pages/Me/Children/MyLostPost/MyLostPost'
+import MyFoundPost from '../pages/Me/Children/MyFoundPost/MyFoundPost'
+import MyPostFoundGoods from '../pages/Me/Children/MyPostFoundGoods/MyPostFoundGoods'
+import MyPostLostGoods from '../pages/Me/Children/MyPostLostGoods/MyPostLostGoods'
+import ChangeEmail from '../pages/Me/Children/ChangeEmail/ChangeEmail'
+import UserLostPost from '../pages/OtherUser/Children/UserLostPost/UserLostPost'
+import UserFoundPost from '../pages/OtherUser/Children/UserFoundPost/UserFoundPost'
 
 // 2. 声明使用
 Vue.use(VueRouter);
@@ -73,20 +78,40 @@ export default  new VueRouter({
         component: Me,
       },
       {
-        path: '/mypost',
-        component: MyPost
+        path: '/myfoundpost',
+        component: MyFoundPost
+      },
+      {
+        path: '/mylostpost',
+        component: MyLostPost
       },
       {
         path: '/detail',
         component: MeDetail
       },
       {
-        path: '/mypostgoods',
-        component: MyPostGoods
+        path: '/changeemail',
+        component: ChangeEmail
       },
       {
-        path: '/user',
+        path: '/mypostfoundgoods/:id',
+        component: MyPostFoundGoods
+      },
+      {
+        path: '/mypostlostgoods/:id',
+        component: MyPostLostGoods
+      },
+      {
+        path: '/user/:id',
         component: OtherUser,
+      },
+      {
+        path: '/userfoundpost',
+        component: UserFoundPost
+      },
+      {
+        path: '/userlostpost',
+        component: UserLostPost
       },
       {
         path: '/login',

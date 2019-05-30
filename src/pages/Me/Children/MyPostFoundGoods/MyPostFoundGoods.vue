@@ -1,72 +1,87 @@
 <template>
-  <div class="foundgoods">
+  <div class="goods">
     <!-- 顶部 Header 区域 -->
-    <mt-header fixed :title="selected_goods.name">
+    <mt-header fixed :title="selected_found_goods.name">
       <span slot="left" @click="goBack">
         <mt-button icon="back"></mt-button>
       </span>
     </mt-header>
     <div class="goods-content">
-      <div class="post-user" @click="goUser(selected_goods.creator, selected_goods.creator_name)">
-        <img src="./image/user.jpg">
-        <span>{{selected_goods.creator_name}}</span>
-      </div>
-      <div class="post-img" v-if="selected_goods.picture_b64">
+      <div class="post-img" v-if="selected_found_goods.picture_b64">
         <yd-lightbox>
-          <yd-lightbox-img :src="selected_goods.picture_b64"></yd-lightbox-img>
+          <yd-lightbox-img :src="selected_found_goods.picture_b64"></yd-lightbox-img>
         </yd-lightbox>
       </div>
       <div class="post-basic">
-        <div><h4>物品名称:</h4><span>{{selected_goods.name}}</span></div>
-		    <div v-if="selected_goods.student_id"><h4>学号:</h4><span>{{selected_goods.student_id}}</span></div>
-        <div v-if="selected_goods.student_name"><h4>姓名:</h4><span>{{selected_goods.student_name}}</span></div>
+        <div><h4>物品名称:</h4><span>{{selected_found_goods.name}}</span></div>
+        <div v-if="selected_found_goods.student_id"><h4>学号:</h4><span>{{selected_found_goods.student_id}}</span></div>
         <div>
           <h4>拾到地点:</h4>
-          <span>{{`(${selected_goods.longitude} , ${selected_goods.latitude})`}}</span>
-          <mt-button size="small" type="default" class="xs-button" @click="goMap(selected_goods.longitude, selected_goods.latitude)">查看地图</mt-button>
+          <span>{{`(${selected_found_goods.longitude} , ${selected_found_goods.latitude})`}}</span>
+          <mt-button size="small" type="default" class="xs-button" @click="goMap(selected_found_goods.longitude, selected_found_goods.latitude)">查看地图</mt-button>
         </div>
-        <div><h4>详细地点:</h4><span>{{selected_goods.place}}</span></div>
-        <div><h4>拾到时间:</h4><span>{{selected_goods.time}}</span></div>
-        <div><h4>交接方式:</h4><span>{{selected_goods.contact_way}}</span></div>
+        <div><h4>详细地点:</h4><span>{{selected_found_goods.place}}</span></div>
+        <div><h4>拾到时间:</h4><span>{{selected_found_goods.time}}</span></div>
+        <div><h4>交接方式:</h4><span>{{selected_found_goods.contact_way}}</span></div>
       </div>
       <div class="post-detail">
         <h4>详细信息</h4>
-        <div>{{selected_goods.info}}</div>
+        <div>{{selected_found_goods.info}}</div>
       </div>
-      <div class="post-time"><span>发布时间：{{selected_goods.create_time}}</span></div>
-      <div class="post-btn"><mt-button type="primary" size="small" v-if="userInfo.username !== selected_goods.creator_name">联系发布人</mt-button></div>
+      <div class="post-time"><span>发布时间：{{selected_found_goods.create_time}}</span></div>
+      <div class="post-btn" v-if="!selected_found_goods.found"><mt-button type="danger" size="small" @click="close_post(selected_found_goods.item_id)">关闭</mt-button></div>
+      <div class="post-btn" v-else><mt-button type="danger" size="small" disabled>已关闭</mt-button></div>
     </div>
   </div>
 </template>
 
 <script>
+  import {finishFound} from './../../../../api/index';
   import {mapState} from 'vuex';
   import {mapActions} from 'vuex';
+  import { MessageBox } from 'mint-ui';
 
   export default {
-    name: "FoundGoods",
+    name: "MyPostFoundGoods",
     data() {
       return {
       }
     },
     computed:{
-      ...mapState(['selected_goods','userInfo']),
+      ...mapState(['selected_found_goods', 'userInfo']),
+    },
+    mounted(){
     },
     methods: {
-      ...mapActions(['synLngLat','reqOtherUserLostPost', 'reqOtherUserFoundPost',"synSeletedUserName"]), // 同步本地存储的用户选择的经纬度
+      ...mapActions(['synLngLat', 'reqUserFoundPost', 'reqFound']),
       goBack() {
         // 点击后退
         this.$router.go(-1);
       },
-      goUser(userid,username){
-        if(this.userInfo.user_id === userid){
-          this.$router.push('/me');
-          return;
+      close_post(item_id){
+        MessageBox.confirm('您确定关闭本条信息吗?').then(action => {
+          if('confirm' === action){
+            this.editState(item_id);
+          }
+        });
+      },
+      async editState(item_id){
+        const result = await finishFound(item_id);
+        if(result.error_code === 0){
+          this.$dialog.toast({
+            mes: '关闭成功',
+            icon: 'success',
+            timeout: 1000
+          });
+          this.reqUserFoundPost(this.userInfo.user_id);
+          this.reqFound();
+        }else{
+          this.$dialog.toast({
+            mes: result.error_msg,
+            icon: 'error',
+            timeout: 1000
+          });
         }
-        this.reqOtherUserLostPost(userid);
-        this.reqOtherUserFoundPost(userid);
-        this.synSeletedUserName(username);
-        this.$router.push('/user/' + userid);
       },
       goMap(lng, lat){
         this.synLngLat({
@@ -80,7 +95,7 @@
 </script>
 
 <style scoped lang="less" ref="stylesheet/less">
-  .foundgoods{
+  .goods{
     background: #F5F5F5;
     width: 100%;
     height: 100%;
@@ -97,21 +112,10 @@
     .goods-content{
       width: 100%;
       height: 100%;
-      padding: 40px 10px 0;
-      .post-user{
-        height: 8%;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        img{
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-        }
-      }
+      padding: 60px 10px 0;
       .post-img{
-        margin: 5px 0 20px;
         height: 45%;
+        margin-bottom: 20px;
         div{
           height: 100%;
           img{
@@ -128,7 +132,7 @@
       .post-basic{
         margin: 10px 0;
         width: 100%;
-        height: 30%;
+        height: 25%;
         background: #fff;
         border-radius: 7px;
         box-shadow: 3px 3px #D4D4D4;
@@ -146,10 +150,10 @@
             font-size: 12px;
           }
           .mint-button.xs-button{
-            height: 25px;
             background: #D4D4D4;
-            color: #333;
+            height: 25px;
             margin-left: 20px;
+            color: #333;
             .mint-button-text{
               font-size: 3px;
             }
@@ -186,8 +190,7 @@
         margin: 10px 0 ;
         .mint-button{
           border-radius: 5px;
-          color: #333;
-          background: rgba(2, 167, 240, 0.505882352941176);
+          color: #fff;
           width: 120px;
         }
       }

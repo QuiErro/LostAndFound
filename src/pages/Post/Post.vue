@@ -22,7 +22,7 @@
       </div>
       <div class="post-cell-item">
         <h5><span><i class="yd-icon-star"></i></span><span>请在地图上选择适当范围</span></h5>
-        <mt-button size="small" type="default" class="xs-button" v-text="'当前位置: '+ latlngStr"></mt-button>
+        <mt-button size="small" type="default" class="xs-button no-margin" v-text="'当前位置: '+ latlngStr" disabled></mt-button>
         <mt-button size="small" type="default" class="xs-button" @click="goMap" >查看地图</mt-button>
       </div>
       <div class="post-cell-item">
@@ -48,7 +48,7 @@
         </div>
       </div>
       <div class="post-cell-item">
-        <h5><span>点击输入更多详细信息</span></h5>
+        <h5><span>点击输入更多详细信息(非必填项)</span></h5>
         <yd-textarea placeholder="最多填写100字" maxlength="100" v-model="info"></yd-textarea>
       </div>
       <div class="post-cell-item">
@@ -100,7 +100,7 @@
     data(){
       return{
         event_type: 0,  // 事件类型   0--失物  1--寻物
-        title: '丢失',
+        title: '拾到',
         goods_name: '', // 物品名称
         pick_place: '', // 详细地点
         school_card_name: '',  // 学生卡姓名
@@ -219,7 +219,6 @@
               _this.imgList.push({
                 file
               });
-              // console.log( _this.imgList);
             };
             image.src= file.src;
             _this.picture_b64 = file.src;
@@ -239,32 +238,33 @@
             timeout: 1000
           });
         }else{
+          let contactStr;
+          if(this.contact_way === '本人联系方式'){
+            contactStr = this.contact_detail;
+          }else{
+            contactStr = this.contact_way;
+          }
+          let postObj = {
+            type: this.prop_type,
+            name: this.goods_name,
+            time: this.pick_time,
+            longitude: this.pick_longitude,
+            latitude: this.pick_latitude,
+            place: this.pick_place,
+            contact_way: contactStr,
+          };
+          if(this.prop_type === 0){
+            postObj.student_id = this.school_card_id; // 缺姓名
+            postObj.student_name = this.school_card_name; // 缺姓名
+          }
+          if(this.picture_b64){
+            postObj.picture_b64 = this.picture_b64;
+          }
+          if(this.info){
+            postObj.info = this.info;
+          }
           if(!this.event_type){
             // 失物
-            let contactStr;
-            if(this.contact_way === '本人联系方式'){
-              contactStr = this.contact_detail;
-            }else{
-              contactStr = this.contact_way;
-            }
-            let postObj = {
-              type: this.prop_type,
-              name: this.goods_name,
-              pick_time: this.pick_time,
-              pick_longitude: this.pick_longitude,
-              pick_latitude: this.pick_latitude,
-              pick_place: this.pick_place,
-              contact_way: contactStr,
-            };
-            if(this.prop_type === 0){
-              postObj.student_id = this.school_card_id; // 缺姓名
-            }
-            if(this.picture_b64){
-              postObj.picture_b64 = this.picture_b64;
-            }
-            if(this.info){
-              postObj.info = this.info;
-            }
             const result = await postFound(postObj);
             if(result.error_code === 0){
               this.$dialog.toast({
@@ -280,6 +280,7 @@
               this.school_card_name = '';
               this.school_card_id = '';
               this.imgList.length = 0;
+              this.limit = 1;
 
               this.reqLost();
               this.reqFound();
@@ -292,30 +293,6 @@
             }
           }else{
             // 寻物
-            let contactStr;
-            if(this.contact_way === '本人联系方式'){
-              contactStr = this.contact_detail;
-            }else{
-              contactStr = this.contact_way;
-            }
-            let postObj = {
-              type: this.prop_type,
-              name: this.goods_name,
-              lost_time: this.pick_time,
-              lost_longitude: this.pick_longitude,
-              lost_latitude: this.pick_latitude,
-              lost_place: this.pick_place,
-              contact_way: contactStr,
-            };
-            if(this.prop_type === 0){
-              postObj.student_id = this.school_card_id; // 缺姓名
-            }
-            if(this.picture_b64){
-              postObj.picture_b64 = this.picture_b64;
-            }
-            if(this.info){
-              postObj.info = this.info;
-            }
             const result = await postLost(postObj);
             if(result.error_code === 0){
               this.$dialog.toast({
@@ -331,7 +308,6 @@
               this.school_card_name = '';
               this.school_card_id = '';
               this.imgList.length = 0;
-
               this.reqLost();
               this.reqFound();
             }else{
@@ -343,7 +319,7 @@
             }
           }
         }
-      }
+      },
     },
     computed: {
       ...mapState(['lnglat']),
@@ -374,7 +350,7 @@
     },
     watch: {
       event_type(){
-        this.title = this.event_type ? '拾到' : '丢失';
+        this.title = this.event_type ? '丢失' : '拾到';
       },
     },
   }
@@ -416,11 +392,6 @@
         .yd-input{
           display: flex;
           align-items: center;
-          input[type=text]{
-            height: 40px;
-            padding: 10px 15px;
-            margin-bottom: 0 !important;
-          }
         }
         .yd-datetime-input{
           background: #fff;
@@ -454,9 +425,11 @@
         }
         .mint-button.xs-button{
           height: 28px;
-          .mint-button-text{
-            font-size: 5px;
-          }
+          font-size: 12px;
+        }
+        .mint-button.xs-button.no-margin{
+          margin-right: 5px;
+          border-radius: 0%;
         }
         .app-bg  img{
             width: 100%;

@@ -10,10 +10,11 @@
       <ul class="mui-table-view">
         <li class="mui-table-view-cell mui-media">
           <a>
-            <img class="mui-media-object mui-pull-left" src="./image/small-loading.svg">
+            <img class="mui-media-object mui-pull-left" src="./image/user.jpg">
             <div class="mui-media-body">
-              <h1>用户名</h1>
+              <h1>{{userInfo.username}}</h1>
               <h1>{{ userInfo.student_id || '未绑定学号' }}</h1>
+              <h1>{{ userInfo.email }}</h1>
               <p class='mui-ellipsis'>
                 <router-link to="/detail" tag="span"><i class="mui-icon mui-icon-compose"></i>编辑个人资料<i class="mui-icon mui-icon-forward"></i></router-link>
               </p>
@@ -22,8 +23,16 @@
         </li>
       </ul>
     </div>
-    <router-link  to="/mypost" class="options" tag="div">
-      <h3>我的发布</h3>
+    <router-link to="/myfoundpost" tag="div" class="options">
+      <h3>我发布的失物招领</h3>
+      <span><i class="mui-icon mui-icon-forward"></i></span>
+    </router-link>
+    <router-link to="/mylostpost" tag="div" class="options">
+      <h3>我发布的寻物启事</h3>
+      <span><i class="mui-icon mui-icon-forward"></i></span>
+    </router-link>
+    <router-link to="/changeemail" class="options" tag="div">
+      <h3>更换邮箱</h3>
       <span><i class="mui-icon mui-icon-forward"></i></span>
     </router-link>
     <div class="options" @click="goQQ">
@@ -34,7 +43,7 @@
       <h3>清空缓存</h3>
       <span><i class="mui-icon mui-icon-forward"></i></span>
     </div>
-    <div class="logout-btn"><mt-button type="primary" size="small" @click="logout">退出登录</mt-button></div>
+    <div class="logout-btn"><mt-button type="danger" size="small" @click="logout">退出登录</mt-button></div>
   </div>
 </template>
 
@@ -72,7 +81,7 @@
             this.$router.replace('/home');
           }
         });
-      }
+      },
     }
   }
 </script>
@@ -226,8 +235,11 @@
       margin: 60px 0 ;
       .mint-button{
         border-radius: 5px;
-        color: #333;
+       /**
+	    color: #333;
         background: rgba(2, 167, 240, 0.505882352941176);
+		*/
+		color: #fff;
         width: 120px;
       }
     }

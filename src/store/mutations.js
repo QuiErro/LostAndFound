@@ -5,6 +5,14 @@ import {
   FOUND_CONTENT,
   LOST_CONTENT,
   SELECTED_GOODS,
+  USER_FOUND_CONTENT,
+  USER_LOST_CONTENT,
+  OTHER_USER_FOUND_CONTENT,
+  OTHER_USER_LOST_CONTENT,
+  SELECTED_LOST_GOODS,
+  SELECTED_FOUND_GOODS,
+  SELECTED_USERNAME,
+  SEARCH_CONTENT,
 } from './mutation-types'
 
 export default {
@@ -23,6 +31,10 @@ export default {
 
   [SELECTED_GOODS](state, {goods}) {
     state.selected_goods = goods;
+  },
+
+  [SELECTED_USERNAME](state, {username}) {
+    state.otherusername = username;
   },
 
   [FOUND_CONTENT](state, {foundContent}) {
@@ -64,4 +76,33 @@ export default {
     state.lost_common_content = lost_common_content;
     state.lost_value_content = lost_value_content;
   },
+
+  [USER_FOUND_CONTENT](state, {userFoundContent}) {
+    state.userFoundContent = userFoundContent;
+  },
+
+  [USER_LOST_CONTENT](state, {userLostContent}) {
+    state.userLostContent = userLostContent;
+  },
+
+  [OTHER_USER_FOUND_CONTENT](state, {otheruserFoundContent}) {
+    state.otheruserFoundContent = otheruserFoundContent;
+  },
+
+  [OTHER_USER_LOST_CONTENT](state, {otheruserLostContent}) {
+    state.otheruserLostContent = otheruserLostContent;
+  },
+
+  [SELECTED_LOST_GOODS](state, {goods}) {
+    state.selected_lost_goods = goods;
+  },
+
+  [SELECTED_FOUND_GOODS](state, {goods}) {
+    state.selected_found_goods = goods;
+  },
+
+  [SEARCH_CONTENT](state, {searchContent}) {
+    state.searchContent = searchContent;
+  },
+
 }

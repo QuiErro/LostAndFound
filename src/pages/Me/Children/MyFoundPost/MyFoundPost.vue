@@ -1,46 +1,59 @@
 <template>
-  <div class="my-post">
+  <div class="my-found-post">
     <!-- 顶部 Header 区域 -->
     <mt-header fixed title="我的发布">
       <span slot="left" @click="goBack">
         <mt-button icon="back"></mt-button>
       </span>
     </mt-header>
-    <div class="user-post-list">
-      <h3>我的发布</h3>
+    <div class="user-post-list" v-if="userFoundContent.length">
+      <h3>我发布的失物招领</h3>
       <mt-loadmore :bottom-method="loadBottom" ref="loadmore" :bottomDistance="30" bottomPullText="上拉加载更多">
         <ul class="mui-table-view">
-          <li class="mui-table-view-cell mui-media" v-for="index in 3" :key="index">
-            <router-link to="/mypostgoods">
-              <img class="mui-media-object mui-pull-left" src="./image/small-loading.svg">
+          <li class="mui-table-view-cell mui-media" v-for="(obj, index) in userFoundContent" :key="index" :class="{mask: obj.found}">
+            <a @click="goMyPostFoundGoods(obj)">
+              <img class="mui-media-object mui-pull-left" :src="obj.picture_b64" v-if="obj.picture_b64">
               <div class="mui-media-body">
-                <h1>校园卡03180000</h1>
+                <h1>{{obj.name}}</h1>
                 <p class='mui-ellipsis'>
-                  <span>丢失时间：2019-05-19</span>
-                  <span>丢失地点：西三教学楼</span>
-                  <span class="post-time">2019-05-19</span>
+                  <span>拾到时间：{{obj.time}}</span>
+                  <span>拾到地点：{{obj.place}}</span>
+                  <span class="post-time">{{obj.create_time}}</span>
                 </p>
               </div>
-            </router-link>
+            </a>
           </li>
         </ul>
       </mt-loadmore>
     </div>
+    <div class="user-post-list" v-else>暂无发布记录</div>
   </div>
 </template>
 
 <script>
+  import {mapState} from 'vuex';
+  import {mapActions} from 'vuex';
 
   export default {
-    name: "Me",
+    name: "MyFoundPost",
     data() {
       return {
+        isShowTips: true,
+        allLoaded: false
       }
     },
+    computed:{
+      ...mapState(['userFoundContent']),
+    },
     methods: {
+      ...mapActions(["synSeletedFoundGoods"]),
       goBack() {
         // 点击后退
         this.$router.go(-1);
+      },
+      goMyPostFoundGoods(obj){
+        this.$router.push('/mypostfoundgoods/' + obj.item_id);
+        this.synSeletedFoundGoods(obj);
       },
       loadBottom() {
         this.isShowTips = false;
@@ -54,7 +67,7 @@
   }
 </script>
 <style scoped lang="less" ref="stylesheet/less">
-  .my-post{
+  .my-found-post{
     background: #F5F5F5;
     width: 100%;
     height: 100%;
@@ -68,7 +81,7 @@
        border-bottom: 1px solid #D4D4D4;
     }
     .user-post-list{
-      padding: 60px 10px 0;
+      padding: 60px 10px;
       height: 100%;
       h3{
         font-weight: lighter;
@@ -87,6 +100,9 @@
           .mui-table-view-cell:after{
             background: #ffffff;
           }
+          li.mask{
+            background: rgba(204,204,204,0.3);
+          }
           li {
             margin: 0 5px 10px;
             background: #ffffff;
@@ -97,18 +113,17 @@
               display: flex;
               flex-direction: row;
               justify-content: center;
-              align-items: center;
               .mui-media-object.mui-pull-left{
                 max-width: 45% !important;
-                width: 40%;
-                height: 35%;;
+                width: 35%;
+                height: 30%;;
                 margin-right: 20px;
               }
               .mui-media-body{
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                align-items: center;
+                align-items: flex-start;
                 h1 {
                   font-size: 14px;
                 }

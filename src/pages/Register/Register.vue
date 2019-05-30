@@ -57,9 +57,8 @@
         this.$router.replace('/login');
       },
       async register(){
-        if(this.email && this.code && this.student_id && this.password){
+        if(this.$refs.emailInput.valid && this.code && this.password){
           this.code = Number(this.code);
-          // console.log(this.type, this.email, this.code, this.student_id, this.password);
           const result = await emailCodeRegister(this.type, this.email, this.code, this.student_id, this.password);
           if(result.error_code === 0){
             this.$dialog.toast({
@@ -70,6 +69,11 @@
             setTimeout(()=>{
               this.$router.replace('/login');
             }, 1000);
+            this.start = false;
+            this.email = '';
+            this.code = null;
+            this.student_id = '';
+            this.password = '';
           }else{
             this.$dialog.toast({
               mes: result.error_msg,
@@ -79,7 +83,7 @@
           }
         }else{
           this.$dialog.toast({
-            mes: '输入框内的信息不得为空',
+            mes: '请确认输入框内容是否规范',
             icon: 'none',
             timeout: 1000
           });
@@ -90,6 +94,7 @@
           // 邮箱格式正确
           this.$dialog.loading.open('发送中...');
           const result = await getEmailCode(this.email);
+          console.log(result);
           this.start = true;
           this.$dialog.loading.close();
          // console.log(result);
@@ -115,7 +120,6 @@
           });
         }
       },
-
     }
   }
 </script>
@@ -124,7 +128,7 @@
   .register-container{
     background: #fff;
     width: 100%;
-    height: 100%;
+    height: auto;
     .back-icon{
       display: flex;
       justify-content: flex-start;

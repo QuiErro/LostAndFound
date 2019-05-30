@@ -3,8 +3,8 @@ export default {
   userInfo: {},
   // 用户选择的经纬度
   lnglat: {
-    lng: 119.204,
-    lat: 26.064
+    lng: 119.204332,
+    lat: 26.06473
   },
   // 寻物信息
   lostContent: [],
@@ -24,4 +24,20 @@ export default {
   found_value_content: [],
   // 记录用户查看的物品信息
   selected_goods: {},
+  // 自己发布过的寻物启事
+  userLostContent: [],
+  // 自己发布过的失物招领
+  userFoundContent: [],
+  // 其他用户发布过的寻物启事
+  otheruserLostContent: [],
+  // 其他用户发布过的失物招领
+  otheruserFoundContent: [],
+  // 记录用户查看的失物物品信息
+  selected_found_goods: {},
+  // 记录用户查看的寻物物品信息
+  selected_lost_goods: {},
+  // 其他用户名
+  otherusername: '',
+  // 记录搜索的物品
+  searchContent: [],
 }
