@@ -10,7 +10,7 @@
       <div class="post-user" @click="goUser(selected_goods.creator)">
         <img :src="'http://47.112.10.160:3389/image/' + selected_goods.creator.photo" v-if="selected_goods.creator.photo">
         <img src="./image/user.jpg" v-else>
-        <span>{{selected_goods.creator_name}}</span>
+        <span>{{selected_goods.creator.username}}</span>
       </div>
       <div class="post-img" v-if="selected_goods.picture">
         <yd-slider autoplay="2500" speed="1000">

@@ -133,6 +133,7 @@
               h1 {
                 font-size: 16px;
                 color: #ffffff;
+                margin-bottom: 5px;
               }
               .mui-ellipsis {
                 font-size: 12px;

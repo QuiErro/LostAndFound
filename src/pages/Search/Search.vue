@@ -180,7 +180,6 @@
       .search-nav{
         width: 100%;
         height: 60px;
-        border-bottom: px solid #dddddd;
         padding: 0 20px;
         display: flex;
         flex-direction: row;
