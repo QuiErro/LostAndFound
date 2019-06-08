@@ -8,11 +8,11 @@
     </mt-header>
     <div class="user-post-list" v-if="userFoundContent.length">
       <h3>我发布的失物招领</h3>
-      <mt-loadmore :bottom-method="loadBottom" ref="loadmore" :bottomDistance="30" bottomPullText="上拉加载更多">
+      <div>
         <ul class="mui-table-view">
           <li class="mui-table-view-cell mui-media" v-for="(obj, index) in userFoundContent" :key="index" :class="{mask: obj.found}">
             <a @click="goMyPostFoundGoods(obj)">
-              <img class="mui-media-object mui-pull-left" :src="obj.picture_b64" v-if="obj.picture_b64">
+              <img class="mui-media-object mui-pull-left" :src="'http://47.112.10.160:3389/image/' + obj.picture[0]" v-if="obj.picture">
               <div class="mui-media-body">
                 <h1>{{obj.name}}</h1>
                 <p class='mui-ellipsis'>
@@ -24,7 +24,7 @@
             </a>
           </li>
         </ul>
-      </mt-loadmore>
+      </div>
     </div>
     <div class="user-post-list" v-else>暂无发布记录</div>
   </div>
@@ -39,7 +39,6 @@
     data() {
       return {
         isShowTips: true,
-        allLoaded: false
       }
     },
     computed:{
@@ -54,14 +53,6 @@
       goMyPostFoundGoods(obj){
         this.$router.push('/mypostfoundgoods/' + obj.item_id);
         this.synSeletedFoundGoods(obj);
-      },
-      loadBottom() {
-        this.isShowTips = false;
-        // 加载更多数据
-        setTimeout(()=>{
-          this.allLoaded = true;// 若数据已全部获取完毕
-          this.$refs.loadmore.onBottomLoaded();
-        },500);
       },
     }
   }
@@ -89,7 +80,7 @@
         margin-left: 5px;
         margin-bottom: 15px;
       }
-      .mint-loadmore{
+      div{
         height: 80%;
         overflow: auto;
         .mui-table-view:before{
@@ -101,38 +92,44 @@
             background: #ffffff;
           }
           li.mask{
-            background: rgba(204,204,204,0.3);
+            color: rgb(170,170,170);
+            p.mui-ellipsis{
+              color: rgb(178, 178, 178)
+            }
           }
           li {
             margin: 0 5px 10px;
             background: #ffffff;
             border: 1px solid #ffffff;
             border-radius: 10px;
-            box-shadow: 2px 2px #cccccc;
+            box-shadow: 2px 2px 5px #D9D9D9;
             a{
               display: flex;
               flex-direction: row;
-              justify-content: center;
               .mui-media-object.mui-pull-left{
-                max-width: 45% !important;
-                width: 35%;
+                max-width: 32% !important;
+                width: 32%;
                 height: 30%;;
                 margin-right: 20px;
               }
               .mui-media-body{
                 display: flex;
+                flex: 1;
                 flex-direction: column;
                 justify-content: center;
                 align-items: flex-start;
                 h1 {
-                  font-size: 14px;
+                  padding-left: 5px;
+                  font-size: 16px;
                 }
                 .mui-ellipsis {
-                  font-size: 12px;
+                  font-size: 13px;
                   display: flex;
                   flex-direction: column;
                   justify-content: space-between;
 
+                  padding-left: 5px;
+                  width: 100%;
                   .post-time{
                     text-align: right;
                   }

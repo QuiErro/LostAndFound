@@ -8,24 +8,22 @@
     </mt-header>
     <div class="options-content">
       <yd-cell-item>
-        <span slot="left">邮箱：</span>
+        <span slot="left"></span>
         <yd-input slot="right" required :debug="true" regex="email" placeholder="请输入邮箱" v-model="email" ref="emailInput"></yd-input>
       </yd-cell-item>
       <yd-cell-item>
-        <span slot="left">邮箱验证码：</span>
-        <yd-input slot="right" required placeholder="请输入邮箱验证码" v-model="code"></yd-input>
+        <span slot="left"></span>
+        <yd-input slot="right" placeholder="请输入邮箱验证码" v-model="code"></yd-input>
+        <yd-sendcode
+          slot="right"
+          @click.native="sendCode"
+          v-model="start"
+          type="warning"
+          init-str="获取验证码"
+          second="60"
+          run-str="{%s}秒后重新获取"
+        ></yd-sendcode>
       </yd-cell-item>
-    </div>
-    <div class="code-btn">
-      <yd-sendcode
-        @click.native="sendCode"
-        v-model="start"
-        type="warning"
-        init-str="获取验证码"
-        size="large"
-        second="60"
-        run-str="{%s}秒后重新获取"
-      ></yd-sendcode>
     </div>
     <div class="post-btn"><mt-button type="danger" size="large" @click="editEmail">确认更换</mt-button></div>
   </div>
@@ -149,12 +147,7 @@
     }
     .post-btn{
       text-align: center;
-      padding: 10px 35px;
-      width: 100%;
-    }
-    .code-btn{
-      text-align: center;
-      padding: 10px 35px;
+      padding: 50px 35px;
       width: 100%;
     }
   }

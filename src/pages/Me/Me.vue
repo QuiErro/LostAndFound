@@ -10,7 +10,8 @@
       <ul class="mui-table-view">
         <li class="mui-table-view-cell mui-media">
           <a>
-            <img class="mui-media-object mui-pull-left" src="./image/user.jpg">
+            <img class="mui-media-object mui-pull-left" :src="'http://47.112.10.160:3389/image/' + userInfo.photo" v-if="userInfo.photo">
+            <img class="mui-media-object mui-pull-left" src="./image/user.jpg" v-else>
             <div class="mui-media-body">
               <h1>{{userInfo.username}}</h1>
               <h1>{{ userInfo.student_id || '未绑定学号' }}</h1>
@@ -39,11 +40,7 @@
       <h3>意见反馈</h3>
       <span><i class="mui-icon mui-icon-forward"></i></span>
     </div>
-    <div class="options">
-      <h3>清空缓存</h3>
-      <span><i class="mui-icon mui-icon-forward"></i></span>
-    </div>
-    <div class="logout-btn"><mt-button type="danger" size="small" @click="logout">退出登录</mt-button></div>
+    <div class="logout-btn"><mt-button type="danger" size="large" @click="logout">退出登录</mt-button></div>
   </div>
 </template>
 
@@ -232,15 +229,14 @@
     }
     .logout-btn{
       text-align: center;
-      margin: 60px 0 ;
+      padding: 60px 15px;
       .mint-button{
         border-radius: 5px;
        /**
 	    color: #333;
         background: rgba(2, 167, 240, 0.505882352941176);
 		*/
-		color: #fff;
-        width: 120px;
+		    color: #fff;
       }
     }
   }

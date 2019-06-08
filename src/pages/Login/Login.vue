@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <div class="back-icon" @click="goBack"><span><i class="mui-icon mui-icon-back"></i></span></div>
+    <div class="back-icon"><span @click="goBack"><i class="mui-icon mui-icon-back"></i></span></div>
     <div class="login-title">欢迎使用XX</div>
     <!--面板标题-->
     <div class="login-header">
@@ -8,15 +8,15 @@
       <a href="javascript:;" :class="{current: !loginMode}" @click="dealLoginMode(false)">邮箱登录</a>
     </div>
     <yd-cell-item v-if="loginMode">
-      <span slot="left">学号：</span>
+      <span slot="left"></span>
       <yd-input slot="right" required placeholder="请输入学号" type="number" v-model="student_id"></yd-input>
     </yd-cell-item>
     <yd-cell-item v-else>
-      <span slot="left">邮箱：</span>
+      <span slot="left"></span>
       <yd-input slot="right" required :debug="true" regex="email" placeholder="请输入邮箱" v-model="email" ref="emailInput"></yd-input>
     </yd-cell-item>
     <yd-cell-item>
-      <span slot="left">密码：</span>
+      <span slot="left"></span>
       <yd-input slot="right" type="password" placeholder="请输入密码" v-model="password"></yd-input>
     </yd-cell-item>
     <div class="post-btn"><mt-button type="primary" size="large" @click="login">登录</mt-button></div>

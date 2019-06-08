@@ -75,7 +75,6 @@
 				map.setCurrentCity("福州");
 				map.enableScrollWheelZoom(true);
 				var marker =new BMap.Marker(point)// 创建标注
-				//var marker2;
 				map.addOverlay(marker)// 将标注添加到地图中
 
 				map.addEventListener("click", (e)=>{
@@ -86,13 +85,6 @@
             this.lng = e.point.lng;
             this.lat = e.point.lat;
           }
-				/**
-         * if(marker2){
-			    		map.removeOverlay(marker2);
-			    	}
-				    marker2 =new BMap.Marker(e.point)// 创建标注
-				    map.addOverlay(marker2)// 将标注添加到地图中
-         *  */
 				});
 				// 触摸移动时触发此事件 此时开启可以拖动。虽然刚初始化该地图不可以拖动，但是可以触发拖动事件。
 				map.addEventListener("touchmove", function (e) {

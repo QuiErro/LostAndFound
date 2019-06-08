@@ -1,14 +1,16 @@
 <template>
   <div id="home">
     <div class="headerTop">
-      <span class="userInfo" @click="goMeOrLogin"><i class="mui-icon mui-icon-person"></i></span>
+      <span class="userInfo" @click="goMeOrLogin">
+        <img :src="'http://47.112.10.160:3389/image/' + userInfo.photo" v-if="userInfo.photo">
+        <img src="./image/user.jpg" v-else>
+      </span>
       <div class="searchInput">
         <router-link to="/search" class="search-nav-icon">
           <span><i class="mui-icon mui-icon-search"></i></span>
           <span>搜索您需要寻找的物品</span>
         </router-link>
       </div>
-      <span class="messageBox"><i class="mui-icon mui-icon-chat"></i></span>
     </div>
     <div class="headerBottom">
       <yd-tab
@@ -18,13 +20,13 @@
         <yd-tab-panel label="失物信息" ></yd-tab-panel>
         <yd-tab-panel label="寻物信息"></yd-tab-panel>
       </yd-tab>
-      <mt-button type="default" size="small" @click="sheetVisible = true">{{prop_type}}</mt-button>
+      <select class="mui-btn mui-btn-block" ref="prop_type" @change="selectPropType">
+        <option value="all">全部</option>
+        <option value="card">校园卡</option>
+        <option value="common">普通物品</option>
+        <option value="value">贵重物品</option>
+      </select>
     </div>
-    <!--选择物品类型-->
-    <mt-actionsheet
-      :actions="actions"
-      v-model="sheetVisible">
-    </mt-actionsheet>
 
     <router-view></router-view>
 
@@ -46,23 +48,14 @@
         // 事件类型
         event_type: 'found',  // 失物 寻物
         show_type: 'all', // 显示的分类
-        // 物品类型
-        sheetVisible: false,
-        prop_type: '全部',
-        actions: [
-          {name: '全部', method: this.selectPropType, type: 'all'},
-          {name: '校园卡', method: this.selectPropType, type: 'card'},
-          {name: '普通物品', method: this.selectPropType, type: 'common'},
-          {name: '贵重物品', method: this.selectPropType, type: 'value'},
-        ],
       }
     },
     computed:{
       ...mapState(['userInfo']),
     },
     created(){
-      this.reqLost();
       this.reqFound();
+      this.reqLost();
     },
     watch: {
       userInfo(){
@@ -73,10 +66,8 @@
     methods: {
       ...mapActions(['reqFound', 'reqLost','reqUserLostPost', 'reqUserFoundPost']),
       // 修改物品类型
-      selectPropType(props) {
-        this.prop_type = props.name;
-        this.show_type = props.type;
-
+      selectPropType() {
+        this.show_type = this.$refs.prop_type.value;
         this.$router.replace('/home/' + this.event_type + '/' + this.show_type);
       },
       // 选项卡切换控制事件类型
@@ -116,14 +107,22 @@
     .headerTop{
       display: flex;
       flex-direction: row;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
 
-      height: 40px;
+      height: 50px;
       width: 100%;
+      padding-left: 10px;
       .userInfo{
         width: 12%;
         text-align: center;
+        margin-right: 10px;
+        img{
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          background-size: cover;
+        }
       }
       .searchInput{
         width: 75%;
@@ -150,14 +149,15 @@
     .headerBottom{
       padding: 5px;
       border-bottom: 1px solid #D4D4D4;
+      position: relative;
 
       display: flex;
       flex-direction: row;
-      justify-content: flex-end;
       align-items: center;
 
       .yd-tab{
-        width: 60%;
+        width: 63%;
+        margin-left: 12%;
       }
       .mint-button{
         font-size: 12px;
@@ -165,20 +165,33 @@
         background: #fff;
         border-radius: 7px;
       }
+      .mui-btn-block{
+        width: 20%;
+        height: 30px;
+        border-radius: 5px;
+        box-shadow: 1px 1px 2px #e2e2e2;
+        position: relative;
+        padding: 0;
+        line-height: 30px;
+        font-size: 12px;
+        position: absolute;
+        right: 10px;
+        text-align: center;
+        text-align-last: center;
+      }
     }
     .post-goods{
       position: fixed;
       right: 15px;
       bottom: 40px;
-      width: 70px;
-      height: 70px;
+      width: 65px;
+      height: 65px;
       border: 1px solid #169BD5;
       border-radius: 50%;
       background: #169BD5;
       opacity: 0.7;
       font-size: 14px;
       color: white;
-      font-weight: bolder;
       z-index: 999;
 
       display: flex;
@@ -187,7 +200,11 @@
       align-items: center;
 
       i{
-        font-size: 30px;
+        font-size: 40px;
+      }
+      span{
+        font-size: 12px;
+        font-weight: 600;
       }
     }
   }

@@ -11,30 +11,27 @@
         <img src="./image/user.jpg">
         <span>{{selected_goods.creator_name}}</span>
       </div>
-      <div class="post-img" v-if="selected_goods.picture_b64">
-        <yd-lightbox>
-          <yd-lightbox-img :src="selected_goods.picture_b64"></yd-lightbox-img>
-        </yd-lightbox>
+      <div class="post-img" v-if="selected_goods.picture">
+        <yd-slider autoplay="2000" speed="500">
+          <yd-slider-item v-for="(picture, index) in selected_goods.picture" :key="index">
+            <img :src="'http://47.112.10.160:3389/image/' + selected_goods.picture[index]">
+          </yd-slider-item>
+        </yd-slider>
       </div>
       <div class="post-basic">
         <div><h4>物品名称:</h4><span>{{selected_goods.name}}</span></div>
 		    <div v-if="selected_goods.student_id"><h4>学号:</h4><span>{{selected_goods.student_id}}</span></div>
         <div v-if="selected_goods.student_name"><h4>姓名:</h4><span>{{selected_goods.student_name}}</span></div>
-        <div>
-          <h4>拾到地点:</h4>
-          <span>{{`(${selected_goods.longitude} , ${selected_goods.latitude})`}}</span>
-          <mt-button size="small" type="default" class="xs-button" @click="goMap(selected_goods.longitude, selected_goods.latitude)">查看地图</mt-button>
-        </div>
-        <div><h4>详细地点:</h4><span>{{selected_goods.place}}</span></div>
+        <div><h4>拾到地点:</h4><span>{{selected_goods.place}}</span></div>
         <div><h4>拾到时间:</h4><span>{{selected_goods.time}}</span></div>
         <div><h4>交接方式:</h4><span>{{selected_goods.contact_way}}</span></div>
       </div>
+      <div id="allmap"></div>
       <div class="post-detail">
         <h4>详细信息</h4>
         <div>{{selected_goods.info}}</div>
       </div>
       <div class="post-time"><span>发布时间：{{selected_goods.create_time}}</span></div>
-      <div class="post-btn"><mt-button type="primary" size="small" v-if="userInfo.username !== selected_goods.creator_name">联系发布人</mt-button></div>
     </div>
   </div>
 </template>
@@ -47,13 +44,27 @@
     name: "FoundGoods",
     data() {
       return {
+        lat: 0,
+        lng: 0
       }
+    },
+    mounted(){
+      this.lat = this.selected_goods.latitude;
+      this.lng = this.selected_goods.longitude;
+      this.baiduMap();
     },
     computed:{
       ...mapState(['selected_goods','userInfo']),
     },
+    watch:{
+      selected_goods(){
+        this.lat = this.selected_goods.latitude;
+        this.lng = this.selected_goods.longitude;
+        this.baiduMap();
+      }
+    },
     methods: {
-      ...mapActions(['synLngLat','reqOtherUserLostPost', 'reqOtherUserFoundPost',"synSeletedUserName"]), // 同步本地存储的用户选择的经纬度
+      ...mapActions(['reqOtherUserLostPost', 'reqOtherUserFoundPost',"synSeletedUserName"]), // 同步本地存储的用户选择的经纬度
       goBack() {
         // 点击后退
         this.$router.go(-1);
@@ -68,13 +79,32 @@
         this.synSeletedUserName(username);
         this.$router.push('/user/' + userid);
       },
-      goMap(lng, lat){
-        this.synLngLat({
-          lat: lat,
-          lng: lng
-        });
-        this.$router.push('/viewmap');
-      }
+      baiduMap () {
+        var map = new BMap.Map('allmap');
+        var point = new BMap.Point(this.lng, this.lat);
+				map.centerAndZoom(point, 17);
+				map.addControl(new BMap.MapTypeControl({
+					mapTypes: [
+						BMAP_NORMAL_MAP,
+						BMAP_HYBRID_MAP
+					]
+				}));
+				map.setCurrentCity("福州");
+				map.enableScrollWheelZoom(true);
+				var marker =new BMap.Marker(point)// 创建标注
+        map.addOverlay(marker)// 将标注添加到地图中
+        // 触摸移动时触发此事件 此时开启可以拖动。虽然刚初始化该地图不可以拖动，但是可以触发拖动事件。
+				map.addEventListener("touchmove", function (e) {
+				  map.enableDragging();
+				});
+				// 触摸结束时触发次此事件  此时开启禁止拖动
+				map.addEventListener("touchend", function (e) {
+				  map.disableDragging();
+				});
+
+				// 初始化地图 禁止拖动   注：虽禁止拖动，但是可以出发拖动事件
+				map.disableDragging();
+			},
     }
   }
 </script>
@@ -107,6 +137,7 @@
           width: 30px;
           height: 30px;
           border-radius: 50%;
+          margin-right: 5px;
         }
       }
       .post-img{
@@ -126,12 +157,12 @@
         }
       }
       .post-basic{
-        margin: 10px 0;
+        margin: 15px 0;
         width: 100%;
-        height: 30%;
+        height: 25%;
         background: #fff;
         border-radius: 7px;
-        box-shadow: 3px 3px #D4D4D4;
+        box-shadow: 2px 2px 5px #D9D9D9;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -145,16 +176,13 @@
             margin-right: 10px;
             font-size: 12px;
           }
-          .mint-button.xs-button{
-            height: 25px;
-            background: #D4D4D4;
-            color: #333;
-            margin-left: 20px;
-            .mint-button-text{
-              font-size: 3px;
-            }
-          }
         }
+      }
+      #allmap{
+        padding: 10px;
+        width: 100%;
+        height: 25%;
+        margin-bottom: 15px;
       }
       .post-detail{
         padding: 10px;
@@ -162,7 +190,7 @@
         height: 25%;
         background: #fff;
         border-radius: 7px;
-        box-shadow: 3px 3px #D4D4D4;
+        box-shadow: 2px 2px 5px #D9D9D9;
         display: flex;
         flex-direction: column;
         h4{
@@ -179,17 +207,7 @@
         text-align: right;
         font-size: 12px;
         font-weight: bolder;
-        color: #aaaaaa;
-      }
-      .post-btn{
-        text-align: center;
-        margin: 10px 0 ;
-        .mint-button{
-          border-radius: 5px;
-          color: #333;
-          background: rgba(2, 167, 240, 0.505882352941176);
-          width: 120px;
-        }
+        color: #bfbfbf;
       }
     }
   }

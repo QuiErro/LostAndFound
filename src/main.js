@@ -19,8 +19,6 @@ Vue.use(MintUI)
 
 // 导入 MUI 的样式
 import './common/mui/css/mui.min.css'
-// 导入扩展图标样式
-import './common/mui/css/icons-extra.css'
 
 // 配置图片懒加载
 import VueLazyload from 'vue-lazyload'

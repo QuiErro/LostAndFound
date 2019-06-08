@@ -8,43 +8,28 @@
     </mt-header>
     <!--搜索面板-->
     <div class="search-panel">
-      <div class="post-cell-item">
-        <h5><span><i class="yd-icon-star"></i></span><span>请选择搜索类型</span></h5>
-        <mt-button size="small" :type="event_type ? 'default' : 'primary' " @click="choiceType(0)">失物招领</mt-button>
-        <mt-button size="small" :type="event_type ? 'primary' : 'default' " @click="choiceType(1)">寻物启事</mt-button>
-        <mt-button type="default" size="small" @click="sheetVisible = true" class="prop-type">{{prop_type}}</mt-button>
-      </div>
       <div class="search-nav">
         <div class="search-input">
           <img src="./images/search.png" alt="" width="25"/>
-          <input ref="mySearch" type="search" @click="isShow=true" v-model="search_name"/>
+          <input ref="mySearch" type="search" v-model="search_name"/>
         </div>
-        <button @click="search">搜索</button>
+        <mt-button type="default" size="small" @click="search">搜索</mt-button>
       </div>
-      <div class="search-history" v-if="isShow">
-        <div class="title">
-          <div>
-            <img src="./images/hot.png" alt="" width="25">
-            <span>历史搜索</span>
-          </div>
-          <img src="./images/clear.svg" alt="" width="20" @click="showSearchPanel(false)" class="clear-icon"/>
-        </div>
-        <ul class="search-list">
-          <li>校园卡</li>
-          <li>手机</li>
-          <li>钥匙</li>
-          <li>书包</li>
-          <li>手表</li>
-          <li>手提电脑</li>
-        </ul>
-        <mt-button type="default" size="small" @click="showSearchPanel(false)">隐藏历史搜索</mt-button>
+      <div class="post-cell-item">
+        <mt-button size="small" :type="event_type ? 'default' : 'primary' " @click="choiceType(0)">失物招领</mt-button>
+        <mt-button size="small" :type="event_type ? 'primary' : 'default' " @click="choiceType(1)">寻物启事</mt-button>
+        <select class="mui-btn mui-btn-block" ref="prop_type" @change="selectPropType">
+          <option value=0>校园卡</option>
+          <option value=1>普通物品</option>
+          <option value=2>贵重物品</option>
+        </select>
       </div>
-      <div class="search-content" v-if="!isShow">
+      <div class="search-content">
         <div class="goods-list">
           <ul class="mui-table-view" v-if="searchContent.length">
             <li class="mui-table-view-cell mui-media" v-for="(obj, index) in searchContent" :key="index">
               <a @click="goGoodsDetail(obj)">
-                <img class="mui-media-object mui-pull-left" :src="obj.picture_b64" v-if="obj.picture_b64">
+                <img class="mui-media-object mui-pull-left" :src="'http://47.112.10.160:3389/image/' + obj.picture[0]" v-if="obj.picture">
                 <div class="mui-media-body">
                   <h1>{{obj.name}}</h1>
                   <p class='mui-ellipsis'>
@@ -60,11 +45,6 @@
         </div>
       </div>
     </div>
-     <!--选择物品类型-->
-    <mt-actionsheet
-      :actions="actions"
-      v-model="sheetVisible">
-    </mt-actionsheet>
   </div>
 </template>
 
@@ -76,18 +56,9 @@
     name: "Search",
     data() {
       return {
-        isShow: true,
         search_name: '', // 搜索框的内容
         event_type: 0,  // 事件类型   0--失物  1--寻物
-         // 物品类型
-        sheetVisible: false,
-        prop_type: '校园卡',
         show_type: 0, // 显示的分类
-        actions: [
-          {name: '校园卡', method: this.selectPropType, type: 0},
-          {name: '普通物品', method: this.selectPropType, type: 1},
-          {name: '贵重物品', method: this.selectPropType, type: 2},
-        ],
       }
     },
     mounted(){
@@ -108,12 +79,7 @@
       },
       // 修改物品类型
       selectPropType(props) {
-        this.prop_type = props.name;
-        this.show_type = props.type;
-      },
-      // 是否显示搜索面板
-      showSearchPanel(flag){
-        this.isShow = flag;
+        this.show_type = this.$refs.prop_type.value;
       },
       goGoodsDetail(obj){
         if(!obj.event_type){
@@ -173,18 +139,13 @@
       left: 0;
       top: 0;
       z-index: 1000;
-      .mint-button.prop-type{
-        font-size: 12px;
-        margin: 0px 5px;
-        background: #169BD5 !important;
-        border-radius: 7px;
-        color: #fff;
-        border: 1px solid #169BD5 !important;
-      }
       .post-cell-item{
-        padding: 10px 20px;
+        padding: 10px 10px 10px 20px;
+        position: relative;
+        display: flex;
+        justify-content: flex-start;
         .mint-button{
-          margin-right: 15px;
+          margin-right: 20px;
           border-radius: 7px;
           height: 28px;
           font-size: 12px;
@@ -196,18 +157,23 @@
           color: #fff;
           border: 1px solid #169BD5;
         }
-        h5{
-          span{
-            color: #333;
-            font-weight: bolder;
-            font-size: 16px;
-
-            i{
-              color: #169BD5;
-              font-size: 10px;
-              display: inline-block;
-              margin-right: 2px;
-            }
+        .mui-btn-block{
+          width: 20%;
+          height: 30px;
+          border-radius: 5px;
+          background: #169BD5;
+          color: #fff;
+          position: relative;
+          padding: 0;
+          line-height: 30px;
+          font-size: 12px;
+          position: absolute;
+          right: 30px;
+          text-align: center;
+          text-align-last: center;
+          option{
+            background: #fff;
+            color: #000;
           }
         }
       }
@@ -229,7 +195,6 @@
           border-radius: 5px;
           background-color: #ededed;
           padding: 0 10px;
-        }
           input{
             background-color: #ededed;
             width: 90%;
@@ -242,45 +207,14 @@
             padding: 5px 15px;
             font-size: 14px;
           }
-      }
-      button{
-        background-color: transparent;
-        font-size: 16px;
-        color: #aaa;
-      }
-    }
-    .search-history{
-      padding: 30px 15px;
-      .title{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        color: #aaa;
-        margin-bottom: 10px;
-        div{
-          display: flex;
-          flex-direction: row;
-          align-items: center;
         }
-      }
-      .search-list{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        li{
-          background-color: #ededed;
+        .mint-button{
+          margin-left: 5px;
+          background-color: #f8f8f8;
+          font-size: 16px;
           color: #aaa;
-          margin: 5px 15px;
-          padding: 5px 5px;
-          border-radius: 10px;
+          border: 1px solid #dddddd;
         }
-      }
-      .mint-button{
-        border-radius: 10px;
-        color: #333;
-        background: rgba(2, 167, 240, 0.505882352941176);
-        margin: 20px auto;
       }
     }
     .search-content{
@@ -291,7 +225,7 @@
           background: #ffffff !important;
         }
         .mui-table-view {
-          background: #eeeef0;
+          background: #fff;
           border-radius: 10px;
           padding: 3px 0 0;
           .mui-table-view-cell:after{
@@ -302,31 +236,34 @@
             background: #ffffff;
             border: 1px solid #ffffff;
             border-radius: 10px;
-            box-shadow: 2px 2px #cccccc;
+            box-shadow: 2px 2px 5px #D9D9D9;
             a{
               display: flex;
               flex-direction: row;
-              justify-content: center;
               .mui-media-object.mui-pull-left{
-                max-width: 45% !important;
-                width: 35%;
+                max-width: 32% !important;
+                width: 32%;
                 height: 30%;;
                 margin-right: 20px;
               }
               .mui-media-body{
                 display: flex;
+                flex: 1;
                 flex-direction: column;
                 justify-content: center;
-                align-items: center;
+                align-items: flex-start;
                 h1 {
-                  font-size: 14px;
+                  padding-left: 5px;
+                  font-size: 16px;
                 }
                 .mui-ellipsis {
-                  font-size: 12px;
+                  font-size: 13px;
                   display: flex;
                   flex-direction: column;
                   justify-content: space-between;
 
+                  padding-left: 5px;
+                  width: 100%;
                   .post-time{
                     text-align: right;
                   }

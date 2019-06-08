@@ -36,7 +36,7 @@
           <h5><span><i class="yd-icon-star"></i></span><span>请输入校园卡姓名</span></h5>
           <yd-input required v-model="school_card_name" max="10" placeholder="最多10字"></yd-input>
           <h5><span><i class="yd-icon-star"></i></span><span>请输入校园卡学号</span></h5>
-          <yd-input required v-model="school_card_id" max="9" type="number" placeholder="输入9位学号"></yd-input>
+          <yd-input required v-model="school_card_id" max="9" type="number" placeholder="请输入9位学号"></yd-input>
         </div>
       </div>
       <div class="post-cell-item">
@@ -62,7 +62,7 @@
         </div>
         <span class="picture-tips">可以选择是否上传图片哦！</span>
         <div class="add-img" v-show="imgList.length">
-          <p class="font14">图片(最多1张，还可上传<span v-text="1-imgList.length"></span>张)</p>
+          <p class="font14">图片(最多3张，还可上传<span v-text="3-imgList.length"></span>张)</p>
           <ul class="img-list">
             <li v-for="(url,index) in imgList" :key="index">
               <img class="del" src="./../../common/img/delete.png" @click.stop="delImg(index)"/>
@@ -125,9 +125,9 @@
         showFace: false,
         imgList: [],
         size: 0,
-        limit:1, //限制图片上传的数量
+        limit:3, //限制图片上传的数量
         tempImgs:[],
-        picture_b64: '',  // 图片base64编码
+        picture_b64: [],  // 图片base64编码
       }
     },
     methods: {
@@ -221,14 +221,14 @@
               });
             };
             image.src= file.src;
-            _this.picture_b64 = file.src;
+            _this.picture_b64.push(file.src);
           }
         }
       },
       delImg(index) {
         this.size = this.size - this.imgList[index].file.size;//总大小
         this.imgList.splice(index, 1);
-        if (this.limit !== undefined) this.limit = 1-this.imgList.length;
+        if (this.limit !== undefined) this.limit = 3-this.imgList.length;
       },
       async post(){
         if(!this.goods_name || !this.pick_place || (this.prop_type === 0 && (!this.school_card_name || !this.school_card_id)) || (this.contact_way === '本人联系方式' && !this.contact_detail)){
@@ -257,7 +257,7 @@
             postObj.student_id = this.school_card_id; // 缺姓名
             postObj.student_name = this.school_card_name; // 缺姓名
           }
-          if(this.picture_b64){
+          if(this.picture_b64.length){
             postObj.picture_b64 = this.picture_b64;
           }
           if(this.info){
@@ -265,6 +265,7 @@
           }
           if(!this.event_type){
             // 失物
+            console.log(postObj);
             const result = await postFound(postObj);
             if(result.error_code === 0){
               this.$dialog.toast({
@@ -275,7 +276,7 @@
               this.goods_name = '';
               this.pick_place = '';
               this.contact_detail = '';
-              this.picture_b64 = '';
+              this.picture_b64 = [];
               this.info = '';
               this.school_card_name = '';
               this.school_card_id = '';
@@ -293,6 +294,7 @@
             }
           }else{
             // 寻物
+            console.log(postObj);
             const result = await postLost(postObj);
             if(result.error_code === 0){
               this.$dialog.toast({
@@ -303,7 +305,7 @@
               this.goods_name = '';
               this.pick_place = '';
               this.contact_detail = '';
-              this.picture_b64 = '';
+              this.picture_b64 = [];
               this.info = '';
               this.school_card_name = '';
               this.school_card_id = '';
@@ -376,11 +378,10 @@
       background: #f5f5f5;
       .mint-button--large{
         border-radius: 10px;
-        color: #333;
-        font-weight: 900;
+        color: #fff;
       }
       .post-cell-item{
-        margin-bottom: 10px;
+        margin-bottom: 15px;
         .mint-button{
           margin-right: 15px;
           background: #fff;
@@ -392,6 +393,10 @@
         .yd-input{
           display: flex;
           align-items: center;
+          width: 95%;
+          margin: 0 auto;
+          font-size: 14px;
+          border-bottom: 1px solid rgb(2, 167, 240);
         }
         .yd-datetime-input{
           background: #fff;
@@ -401,9 +406,10 @@
           border: 1px solid rgba(0, 0, 0, 0.2);
         }
         .yd-textarea{
+          margin-top: 10px;
           padding: 0;
           border-radius: 10px;
-          box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+          box-shadow: 2px 2px 3px #D9D9D9;
         }
         h5{
           span{
@@ -422,6 +428,11 @@
         h5.horizon{
           display: inline-block;
           margin-right: 20px;
+        }
+        div{
+          .yd-input{
+            margin-bottom:10px;
+          }
         }
         .mint-button.xs-button{
           height: 28px;

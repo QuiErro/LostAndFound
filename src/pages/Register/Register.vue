@@ -1,33 +1,31 @@
 <template>
   <div class="register-container">
-    <div class="back-icon" @click="goBack"><span><i class="mui-icon mui-icon-back"></i></span></div>
+    <div class="back-icon"><span @click="goBack"><i class="mui-icon mui-icon-back"></i></span></div>
     <yd-cell-item>
-      <span slot="left">邮箱：</span>
-      <yd-input slot="right" required :debug="true" regex="email" placeholder="请输入邮箱" v-model="email" ref="emailInput"></yd-input>
+      <span slot="left"></span>
+      <yd-input  slot="right" required :debug="true" regex="email" placeholder="请输入邮箱" v-model="email" ref="emailInput"></yd-input>
     </yd-cell-item>
     <yd-cell-item>
-      <span slot="left">邮箱验证码：</span>
-      <yd-input slot="right" required placeholder="请输入邮箱验证码" v-model="code"></yd-input>
-    </yd-cell-item>
-    <yd-cell-item>
-      <span slot="left">学号：</span>
-      <yd-input slot="right" placeholder="非必填项" v-model="student_id"></yd-input>
-    </yd-cell-item>
-    <yd-cell-item>
-      <span slot="left">密码：</span>
-      <yd-input slot="right" type="password" placeholder="请输入密码" v-model="password"></yd-input>
-    </yd-cell-item>
-    <div class="code-btn">
-      <yd-sendcode
+      <span slot="left"></span>
+      <yd-input slot="right" placeholder="请输入邮箱验证码" v-model="code"></yd-input>
+      <yd-sendcode slot="right"
         @click.native="sendCode"
         v-model="start"
         type="warning"
         init-str="获取验证码"
-        size="large"
         second="60"
         run-str="{%s}秒后重新获取"
-      ></yd-sendcode>
-    </div>
+      >
+      </yd-sendcode>
+    </yd-cell-item>
+    <yd-cell-item>
+      <span slot="left"></span>
+      <yd-input slot="right" placeholder="请输入学号" v-model="student_id"></yd-input>
+    </yd-cell-item>
+    <yd-cell-item>
+      <span slot="left"></span>
+      <yd-input slot="right" type="password" placeholder="请输入密码" v-model="password"></yd-input>
+    </yd-cell-item>
     <div class="post-btn"><mt-button type="primary" size="large" @click="register">注册</mt-button></div>
     <div class="gologin" @click="goLogin">立即登录</div>
   </div>
@@ -129,6 +127,7 @@
     background: #fff;
     width: 100%;
     height: auto;
+    min-height: 100%;
     .back-icon{
       display: flex;
       justify-content: flex-start;
@@ -146,12 +145,7 @@
     }
     .post-btn{
       text-align: center;
-      padding: 10px 35px;
-      width: 100%;
-    }
-    .code-btn{
-      text-align: center;
-      padding: 10px 35px;
+      padding: 25px 35px;
       width: 100%;
     }
     .gologin{

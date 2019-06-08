@@ -1,23 +1,26 @@
 <template>
-  <yd-pullrefresh :callback="loadNewList" ref="pullrefreshDemo">
-    <div id="prop-list">
-      <div class="cards-collection" v-if="isShowCardCollection">
-        <yd-slider autoplay="2000" speed="500">
-            <yd-slider-item>
-              <img src="./../../image/lunbo2.jpg">
-            </yd-slider-item>
-            <yd-slider-item>
-              <img src="./../../image/lunbo3.jpg">
-            </yd-slider-item>
-        </yd-slider>
-      </div>
+  <div id="prop-list">
+    <div class="cards-collection" v-if="isShowCardCollection">
+      <yd-slider autoplay="2000" speed="500">
+          <yd-slider-item>
+            <img src="./../../image/lunbo2.jpg">
+          </yd-slider-item>
+          <yd-slider-item>
+            <img src="./../../image/lunbo3.jpg">
+          </yd-slider-item>
+          <yd-slider-item>
+            <img src="./../../image/lunbo4.jpg">
+          </yd-slider-item>
+      </yd-slider>
+    </div>
+    <yd-pullrefresh :callback="loadNewList" ref="pullrefreshDemo">
       <div class="goods-list"  v-if="showContent.length">
         <ul class="mui-table-view">
           <li class="mui-table-view-cell mui-media" v-for="(obj, index) in showContent" :key="index">
             <a @click="goGoodsDetail(obj)">
-              <img class="mui-media-object mui-pull-left" :src="obj.picture_b64" v-if="obj.picture_b64">
+              <img class="mui-media-object mui-pull-left" :src="'http://47.112.10.160:3389/image/' + obj.picture[0]" v-if="obj.picture">
               <div class="mui-media-body">
-                <h1>{{obj.name}}</h1>
+                <h1>{{obj.name}}{{obj.student_id || ''}}</h1>
                 <p class='mui-ellipsis'>
                   <span>丢失时间：{{obj.time}}</span>
                   <span>丢失地点：{{obj.place}}</span>
@@ -28,9 +31,9 @@
           </li>
         </ul>
       </div>
-      <div class="showIftips" v-else>暂时没有任何物品</div>
-    </div>
-   </yd-pullrefresh>
+      <div class="showIftips" v-else>暂时没有物品</div>
+    </yd-pullrefresh>
+  </div>
 </template>
 
 <script>
@@ -116,6 +119,7 @@
       img{
         width: 100%;
         height: 100%;
+        border-radius: 5px;
       }
     }
   }
@@ -134,31 +138,34 @@
         background: #ffffff;
         border: 1px solid #ffffff;
         border-radius: 10px;
-        box-shadow: 2px 2px #cccccc;
+        box-shadow: 2px 2px 5px #D9D9D9;
         a{
           display: flex;
           flex-direction: row;
-          justify-content: center;
           .mui-media-object.mui-pull-left{
-            max-width: 45% !important;
-            width: 35%;
+            max-width: 32% !important;
+            width: 32%;
             height: 30%;;
             margin-right: 20px;
           }
           .mui-media-body{
             display: flex;
+            flex: 1;
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
             h1 {
-              font-size: 14px;
+              padding-left: 5px;
+              font-size: 16px;
             }
             .mui-ellipsis {
-              font-size: 12px;
+              font-size: 13px;
               display: flex;
               flex-direction: column;
               justify-content: space-between;
 
+              padding-left: 5px;
+              width: 100%;
               .post-time{
                 text-align: right;
               }

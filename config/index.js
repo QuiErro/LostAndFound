@@ -9,7 +9,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-   /* proxyTable: {
+    proxyTable: {
 	  '/api': {
         target: 'http://47.112.10.160:3389', //源地址
         changeOrigin: true, //改变源
@@ -17,7 +17,7 @@ module.exports = {
           '^/api': '' //路径重写
         }
       },
-	  },*/
+	},
 	
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

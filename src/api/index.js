@@ -1,8 +1,7 @@
 import ajax from './ajax'
 
-// 'http://47.112.10.160:3389';  // 服务器真实地址
 //const BASE_URL = '/api'; // 解决跨域
-const BASE_URL = 'http://47.112.10.160:3389';
+ const BASE_URL = 'http://47.112.10.160:3389'; // 服务器真实地址
 
 // 请求邮箱验证码
 export const getEmailCode = (email) => ajax(BASE_URL + '/api/register_email_code', {email}, 'POST');
@@ -25,6 +24,9 @@ export const getAllFound = () => ajax(BASE_URL + '/api/all_found');
 // 请求首页寻物信息
 export const getAllLost = () => ajax(BASE_URL + '/api/all_lost');
 
+// 获取用户信息
+export const getUserInfo = (id) => ajax(BASE_URL + '/api/user/' + id + '/info');
+
 // 邮箱验证码注册
 export const userEdit = (username, student_id) => ajax(BASE_URL + '/api/user_edit', {username, student_id}, 'POST');
 
@@ -33,6 +35,9 @@ export const getEditEmailCode = (email) => ajax(BASE_URL + '/api/get_update_emai
 
 // 修改邮箱
 export const emailChange = (email, code) => ajax(BASE_URL + '/api/update_email', {email, code}, 'POST');
+
+// 修改头像
+export const photoChange = (params) => ajax(BASE_URL + '/api/update_photo', params, 'POST');
 
 // 查看某用户发布过的信息  /api/user/(user_id)/all_found
 export const getUser_found = (id) => ajax(BASE_URL + '/api/user/' + id + '/all_found');
