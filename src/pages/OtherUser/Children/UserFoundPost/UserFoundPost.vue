@@ -1,18 +1,18 @@
 <template>
   <div class="user-found-post">
     <!-- 顶部 Header 区域 -->
-    <mt-header fixed :title="`${otherusername}的发布`">
+    <mt-header fixed :title="`${otheruser.username}的发布`">
       <span slot="left" @click="goBack">
         <mt-button icon="back"></mt-button>
       </span>
     </mt-header>
     <div class="user-post-list" v-if="otheruserFoundContent.length">
-      <h3>{{otherusername}}发布的失物招领</h3>
+      <h3>{{otheruser.username}}发布的失物招领</h3>
       <div>
         <ul class="mui-table-view">
           <li class="mui-table-view-cell mui-media" v-for="(obj, index) in otheruserFoundContent" :key="index" :class="{mask: obj.found}">
             <a @click="goPostFoundGoods(obj)">
-              <img class="mui-media-object mui-pull-left" :src="obj.picture_b64" v-if="obj.picture_b64">
+              <img class="mui-media-object mui-pull-left"  :src="'http://47.112.10.160:3389/image/' + obj.picture[0]" v-if="obj.picture">
               <div class="mui-media-body">
                 <h1>{{obj.name}}</h1>
                 <p class='mui-ellipsis'>
@@ -42,7 +42,7 @@
       }
     },
     computed:{
-      ...mapState(['otheruserFoundContent', 'otherusername']),
+      ...mapState(['otheruserFoundContent', 'otheruser']),
     },
     methods: {
       ...mapActions(['synSeletedGoods']),
@@ -81,7 +81,7 @@
         margin-bottom: 15px;
       }
       div{
-        height: 80%;
+        height: auto;
         overflow: auto;
         .mui-table-view:before{
           background: #ffffff !important;
@@ -102,7 +102,7 @@
             background: #ffffff;
             border: 1px solid #ffffff;
             border-radius: 10px;
-            box-shadow: 2px 2px 5px #D9D9D9;
+            box-shadow: 1px 1px 4px #dfdfdf;
             a{
               display: flex;
               flex-direction: row;

@@ -236,7 +236,7 @@
             background: #ffffff;
             border: 1px solid #ffffff;
             border-radius: 10px;
-            box-shadow: 2px 2px 5px #D9D9D9;
+            box-shadow: 1px 1px 4px #dfdfdf;
             a{
               display: flex;
               flex-direction: row;

@@ -1,7 +1,7 @@
 <template>
   <div class="other-user">
     <!-- 顶部 Header 区域 -->
-    <mt-header fixed :title="`${otherusername}的主页`">
+    <mt-header fixed :title="`${otheruser.username}的主页`">
       <span slot="left" @click="goBack">
         <mt-button icon="back"></mt-button>
       </span>
@@ -10,9 +10,10 @@
       <ul class="mui-table-view">
         <li class="mui-table-view-cell mui-media">
           <a>
-            <img class="mui-media-object mui-pull-left" src="./image/user.jpg">
+            <img class="mui-media-object mui-pull-left" :src="'http://47.112.10.160:3389/image/' + otheruser.photo" v-if="otheruser.photo">
+            <img class="mui-media-object mui-pull-left" src="./image/user.jpg" v-else>
             <div class="mui-media-body">
-              <h1>{{otherusername}}</h1>
+              <h1>{{otheruser.username}}</h1>
               <p class='mui-ellipsis'>
                 <span><i class="mui-icon mui-icon-email"></i>私信ta</span>
               </p>
@@ -43,7 +44,7 @@
       }
     },
     computed:{
-      ...mapState(['otherusername'])
+      ...mapState(['otheruser'])
     },
     methods: {
       goBack() {

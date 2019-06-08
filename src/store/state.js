@@ -36,8 +36,12 @@ export default {
   selected_found_goods: {},
   // 记录用户查看的寻物物品信息
   selected_lost_goods: {},
-  // 其他用户名
-  otherusername: '',
+  // 其他用户
+  otheruser: {},
   // 记录搜索的物品
   searchContent: [],
+   // 记录未认领的卡
+  student_cards: [],
+  // 记录某月未认领的卡
+  selected_month: null,
 }

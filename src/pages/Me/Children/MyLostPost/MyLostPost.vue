@@ -81,7 +81,7 @@
         margin-bottom: 15px;
       }
       div{
-        height: 80%;
+        height: auto;
         overflow: auto;
         .mui-table-view:before{
           background: #ffffff !important;
@@ -102,7 +102,7 @@
             background: #ffffff;
             border: 1px solid #ffffff;
             border-radius: 10px;
-            box-shadow: 2px 2px 5px #D9D9D9;
+            box-shadow: 1px 1px 4px #dfdfdf;
             a{
               display: flex;
               flex-direction: row;

@@ -11,8 +11,10 @@ import {
   OTHER_USER_LOST_CONTENT,
   SELECTED_LOST_GOODS,
   SELECTED_FOUND_GOODS,
-  SELECTED_USERNAME,
+  SELECTED_USER,
   SEARCH_CONTENT,
+  STUDENT_CARDS,
+  SELECTED_MONTH
 } from './mutation-types'
 
 export default {
@@ -33,8 +35,8 @@ export default {
     state.selected_goods = goods;
   },
 
-  [SELECTED_USERNAME](state, {username}) {
-    state.otherusername = username;
+  [SELECTED_USER](state, {user}) {
+    state.otheruser = user;
   },
 
   [FOUND_CONTENT](state, {foundContent}) {
@@ -105,4 +107,11 @@ export default {
     state.searchContent = searchContent;
   },
 
+  [STUDENT_CARDS](state, {student_cards}) {
+    state.student_cards = student_cards;
+  },
+
+  [SELECTED_MONTH](state, {selected_month}) {
+    state.selected_month = selected_month;
+  },
 }

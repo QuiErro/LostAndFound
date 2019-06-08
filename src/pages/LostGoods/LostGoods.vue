@@ -7,12 +7,13 @@
       </span>
     </mt-header>
     <div class="goods-content">
-      <div class="post-user" @click="goUser(selected_goods.creator, selected_goods.creator_name)">
-        <img src="./image/user.jpg">
-        <span>{{selected_goods.creator_name}}</span>
+      <div class="post-user" @click="goUser(selected_goods.creator)">
+        <img :src="'http://47.112.10.160:3389/image/' + selected_goods.creator.photo" v-if="selected_goods.creator.photo">
+        <img src="./image/user.jpg" v-else>
+        <span>{{selected_goods.creator.username}}</span>
       </div>
       <div class="post-img" v-if="selected_goods.picture">
-        <yd-slider autoplay="2000" speed="500">
+        <yd-slider autoplay="2500" speed="1000">
           <yd-slider-item v-for="(picture, index) in selected_goods.picture" :key="index">
             <img :src="'http://47.112.10.160:3389/image/' + selected_goods.picture[index]">
           </yd-slider-item>
@@ -31,6 +32,7 @@
         <div>{{selected_goods.info}}</div>
       </div>
       <div class="post-time"><span>发布时间：{{selected_goods.create_time}}</span></div>
+      <div class="post-btn" v-if="selected_goods.found"><mt-button type="danger" size="small" disabled>已关闭</mt-button></div>
     </div>
   </div>
 </template>
@@ -63,20 +65,20 @@
       }
     },
     methods: {
-      ...mapActions(['reqOtherUserLostPost', 'reqOtherUserFoundPost', 'synSeletedUserName']), // 同步本地存储的用户选择的经纬度
+      ...mapActions(['reqOtherUserLostPost', 'reqOtherUserFoundPost', 'synSeletedUser']), // 同步本地存储的用户选择的经纬度
       goBack() {
         // 点击后退
         this.$router.go(-1);
       },
-      goUser(userid,username){
-        if(this.userInfo.user_id === userid){
+      goUser(user){
+        if(this.userInfo.user_id === user.user_id){
           this.$router.push('/me');
           return;
         }
-        this.reqOtherUserLostPost(userid);
-        this.reqOtherUserFoundPost(userid);
-        this.synSeletedUserName(username);
-        this.$router.push('/user/' + userid);
+        this.reqOtherUserLostPost(user.user_id);
+        this.reqOtherUserFoundPost(user.user_id);
+        this.synSeletedUser(user);
+        this.$router.push('/user/' + user.user_id);
       },
       baiduMap () {
         var map = new BMap.Map('allmap');
@@ -161,7 +163,7 @@
         height: 25%;
         background: #fff;
         border-radius: 7px;
-        box-shadow: 2px 2px 5px #D9D9D9;
+        box-shadow: 1px 1px 4px #dfdfdf;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -189,7 +191,7 @@
         height: 25%;
         background: #fff;
         border-radius: 7px;
-        box-shadow: 2px 2px 5px #D9D9D9;
+        box-shadow: 1px 1px 4px #dfdfdf;
         display: flex;
         flex-direction: column;
         h4{
@@ -207,6 +209,14 @@
         font-size: 12px;
         font-weight: bolder;
         color: #bfbfbf;
+      }
+      .post-btn{
+        text-align: center;
+        margin: 10px 0 ;
+        .mint-button{
+          border-radius: 5px;
+          width: 120px;
+        }
       }
     }
   }

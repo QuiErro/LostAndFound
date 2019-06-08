@@ -1,7 +1,7 @@
 import ajax from './ajax'
 
 //const BASE_URL = '/api'; // 解决跨域
- const BASE_URL = 'http://47.112.10.160:3389'; // 服务器真实地址
+const BASE_URL = 'http://47.112.10.160:3389'; // 服务器真实地址
 
 // 请求邮箱验证码
 export const getEmailCode = (email) => ajax(BASE_URL + '/api/register_email_code', {email}, 'POST');
@@ -57,3 +57,5 @@ export const searchFound = (params) => ajax(BASE_URL + '/api/search_found', para
 // 查找寻物
 export const searchLost = (params) => ajax(BASE_URL + '/api/search_lost', params, 'POST');
 
+// 获取月份未认领学生卡
+export const getStudentCard = (year, month) => ajax(BASE_URL + '/api/student_card/' + year + '/' + month);

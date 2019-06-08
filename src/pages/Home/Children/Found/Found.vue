@@ -1,15 +1,9 @@
 <template>
   <div id="prop-list">
     <div class="cards-collection" v-if="isShowCardCollection">
-      <yd-slider autoplay="2000" speed="500">
-          <yd-slider-item>
-            <img src="./../../image/lunbo2.jpg">
-          </yd-slider-item>
-          <yd-slider-item>
-            <img src="./../../image/lunbo3.jpg">
-          </yd-slider-item>
-          <yd-slider-item>
-            <img src="./../../image/lunbo4.jpg">
+      <yd-slider autoplay="3000" speed="1000">
+          <yd-slider-item v-for="index in 3" :key="index">
+            <img :src='"./../../image/" + images[index - 1] + ".png"' @click="goStudentCard(index)">
           </yd-slider-item>
       </yd-slider>
     </div>
@@ -46,22 +40,30 @@
       return{
         showContent: this.foundContent, // 首页要展示的内容
         isShowCardCollection: true, // 是否显示学生卡集合信息
+        images: [],
+        month: null,
       }
     },
     created(){
-    if(this.$route.params.type === 'all'){
+      if(this.$route.params.type === 'all'){
         this.showContent = this.foundContent;
         this.isShowCardCollection = true;
-     }else if(this.$route.params.type === 'card'){
+      }else if(this.$route.params.type === 'card'){
        this.showContent = this.found_card_content;
        this.isShowCardCollection = false;
-     }else if(this.$route.params.type === 'common'){
+      }else if(this.$route.params.type === 'common'){
         this.showContent = this.found_common_content;
         this.isShowCardCollection = false;
-     }else{
+      }else{
         this.showContent = this.found_value_content;
         this.isShowCardCollection = false;
-     }
+      }
+      let month = new Date().getMonth() + 1;
+      let preMonth = month - 1 <= 0 ? (month - 1 + 12) : (month - 1);
+      let firstMonth = month - 2 <= 0 ? (month - 2 + 12) : (month - 2);
+      this.images.push(firstMonth);
+      this.images.push(preMonth);
+      this.images.push(month);
     },
     watch:{
       $route(){
@@ -83,13 +85,20 @@
         if(this.$route.params.type === 'all'){
           this.showContent = this.foundContent;
         }
-      }
+      },
+      student_cards(){
+        if(this.student_cards.length){
+          this.$router.push('/studentscard');
+        }else{
+          this.$dialog.alert({mes: '本月没有未认领的学生卡哦！'});
+        }
+      },
     },
     computed:{
-      ...mapState(['foundContent', 'found_card_content', 'found_common_content', 'found_value_content']),
+      ...mapState(['foundContent', 'found_card_content', 'found_common_content', 'found_value_content','student_cards']),
     },
     methods:{
-      ...mapActions(["synSeletedGoods",'reqFound']),
+      ...mapActions(["synSeletedGoods",'reqFound','reqStudentCard', 'synSeletedMonth']),
       // 下拉刷新
       loadNewList() {
         this.reqFound();
@@ -103,6 +112,16 @@
       goGoodsDetail(obj){
         this.$router.push('/foundgoods/' + obj.item_id);
         this.synSeletedGoods(obj);
+      },
+      goStudentCard(index){
+        let year = new Date().getFullYear();
+        let month = new Date().getMonth() + 1 + (index - 3);
+        if(month <= 0){
+          month += 12;
+        }
+        this.month = month;
+        this.synSeletedMonth(this.month);
+        this.reqStudentCard({year, month});
       }
     },
   }
@@ -112,6 +131,7 @@
 #prop-list{
   width: 100%;
   height: 100%;
+  background: #f5f5f5;
 
   display: flex;
   flex-direction: column;
@@ -143,7 +163,7 @@
         background: #ffffff;
         border: 1px solid #ffffff;
         border-radius: 10px;
-        box-shadow: 2px 2px 5px #D9D9D9;
+        box-shadow: 1px 1px 4px #dfdfdf;
         a{
           display: flex;
           flex-direction: row;

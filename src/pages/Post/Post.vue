@@ -412,6 +412,7 @@
           box-shadow: 2px 2px 3px #D9D9D9;
         }
         h5{
+          margin-bottom: 7px;
           span{
             color: #333;
             font-weight: bolder;

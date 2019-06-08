@@ -5,7 +5,8 @@ import {
   getUser_lost,
   getUser_found,
   searchFound,
-  searchLost
+  searchLost,
+  getStudentCard
 } from '../api'
 
 import {
@@ -21,8 +22,10 @@ import {
   OTHER_USER_LOST_CONTENT,
   SELECTED_FOUND_GOODS,
   SELECTED_LOST_GOODS,
-  SELECTED_USERNAME,
+  SELECTED_USER,
   SEARCH_CONTENT,
+  STUDENT_CARDS,
+  SELECTED_MONTH
 } from './mutation-types'
 
 export default {
@@ -64,6 +67,7 @@ export default {
     const result_found = await getUser_found(id);
     commit(USER_FOUND_CONTENT, {userFoundContent: result_found.data})
   },
+
   // 获取自己发表的寻物启事
   async reqUserLostPost({commit}, id) {
     const result_lost = await getUser_lost(id);
@@ -111,8 +115,21 @@ export default {
     commit(SELECTED_LOST_GOODS, {goods});
   },
 
-  // 记录查看的某用户的用户名
-  synSeletedUserName({commit}, username){
-    commit(SELECTED_USERNAME, {username});
+  // 记录查看的某用户
+  synSeletedUser({commit}, user){
+    commit(SELECTED_USER, {user});
+  },
+
+  // 记录查看的某月份未认领的卡
+  synSeletedMonth({commit}, selected_month){
+    commit(SELECTED_MONTH, {selected_month});
+  },
+
+  // 获取未认领卡
+  async reqStudentCard({commit}, {year, month}) {
+    const result = await getStudentCard(year, month);
+    if(result.error_code === 0){
+      commit(STUDENT_CARDS, {student_cards: result.data})
+    }
   },
 }

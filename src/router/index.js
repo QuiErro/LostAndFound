@@ -23,6 +23,7 @@ import MyPostLostGoods from '../pages/Me/Children/MyPostLostGoods/MyPostLostGood
 import ChangeEmail from '../pages/Me/Children/ChangeEmail/ChangeEmail'
 import UserLostPost from '../pages/OtherUser/Children/UserLostPost/UserLostPost'
 import UserFoundPost from '../pages/OtherUser/Children/UserFoundPost/UserFoundPost'
+import StudentsCard from '../pages/StudentsCard/StudentsCard'
 
 // 2. 声明使用
 Vue.use(VueRouter);
@@ -120,6 +121,10 @@ export default  new VueRouter({
       {
         path: '/register',
         component: Register,
+      },
+      {
+        path: '/studentscard',
+        component: StudentsCard,
       },
       {
         path: '/',

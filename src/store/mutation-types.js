@@ -10,6 +10,8 @@ export const OTHER_USER_FOUND_CONTENT = 'other_user_found_content'; // 记录其
 export const OTHER_USER_LOST_CONTENT = 'other_user_lost_content'; // 记录其他用户发布过的寻物启事
 export const SELECTED_FOUND_GOODS = 'selected_found_goods'; // 记录用户查看的失物物品信息
 export const SELECTED_LOST_GOODS = 'selected_lost_goods'; // 记录用户查看的寻物物品信息
-export const SELECTED_USERNAME = 'selected_username'; // 记录某用户名
+export const SELECTED_USER = 'selected_user'; // 记录某用户
 export const SEARCH_CONTENT = 'search_content'; // 记录搜索的物品信息
+export const STUDENT_CARDS = 'student_cards'; // 记录未认领的卡
+export const SELECTED_MONTH = 'selected_month'; // 记录某月未认领的卡
 

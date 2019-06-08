@@ -8,7 +8,7 @@
     </mt-header>
     <div class="goods-content">
       <div class="post-img" v-if="selected_found_goods.picture">
-        <yd-slider autoplay="2000" speed="500">
+        <yd-slider autoplay="2500" speed="1000">
           <yd-slider-item v-for="(picture, index) in selected_found_goods.picture" :key="index">
             <img :src="'http://47.112.10.160:3389/image/' + selected_found_goods.picture[index]">
           </yd-slider-item>
@@ -164,7 +164,7 @@
         height: 25%;
         background: #fff;
         border-radius: 7px;
-        box-shadow: 2px 2px 5px #D9D9D9;
+        box-shadow: 1px 1px 4px #dfdfdf;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -192,7 +192,7 @@
         height: 25%;
         background: #fff;
         border-radius: 7px;
-        box-shadow: 2px 2px 5px #D9D9D9;
+        box-shadow: 1px 1px 4px #dfdfdf;
         display: flex;
         flex-direction: column;
         h4{
