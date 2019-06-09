@@ -128,12 +128,13 @@
     width: 100%;
     height: auto;
     min-height: 100%;
+    font-size: 8px;
     .back-icon{
       display: flex;
       justify-content: flex-start;
       align-items: center;
       padding: 10px;
-      font-size: 20px;
+      font-size: 2.5em;
       color: #333;
       margin-bottom: 30px;
     }
@@ -150,7 +151,7 @@
     }
     .gologin{
       padding: 25px 20px;
-      font-size: 14px;
+      font-size: 1.75em;
       color: #aaa;
     }
   }

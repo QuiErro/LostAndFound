@@ -1,7 +1,7 @@
 import ajax from './ajax'
 
-//const BASE_URL = '/api'; // 解决跨域
-const BASE_URL = 'http://47.112.10.160:3389'; // 服务器真实地址
+const BASE_URL = '/api'; // 解决跨域
+//const BASE_URL = 'http://47.112.10.160:3389'; // 服务器真实地址
 
 // 请求邮箱验证码
 export const getEmailCode = (email) => ajax(BASE_URL + '/api/register_email_code', {email}, 'POST');

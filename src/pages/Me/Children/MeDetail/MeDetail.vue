@@ -61,7 +61,7 @@
       }
     },
     methods: {
-      ...mapActions(['syncUserInfo']), // 同步本地存储的用户信息
+      ...mapActions(['syncUserInfo', 'reqFound', 'reqLost',]), // 同步本地存储的用户信息
       goBack() {
         // 点击后退
         this.$router.go(-1);
@@ -137,6 +137,8 @@
             icon: 'success',
             timeout: 1000
           });
+          this.reqFound();
+          this.reqLost();
         }else{
           this.$dialog.toast({
             mes: '修改失败',
@@ -156,6 +158,8 @@
             icon: 'success',
             timeout: 1000
           });
+          this.reqFound();
+          this.reqLost();
           this.syncUserInfo(result.data);
           this.$router.replace('/me');
         }else{

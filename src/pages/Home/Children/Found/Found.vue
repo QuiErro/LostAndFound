@@ -170,12 +170,12 @@
           .mui-media-object.mui-pull-left{
             max-width: 32% !important;
             width: 32%;
-            height: 30%;;
+            height: 30%;
             margin-right: 20px;
           }
           .mui-media-body{
             display: flex;
-             flex: 1;
+            flex: 1;
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
