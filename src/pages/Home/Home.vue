@@ -147,17 +147,17 @@
       }
     }
     .headerBottom{
-      padding: 5px;
+      padding: 5px 0;
       border-bottom: 1px solid #D4D4D4;
       position: relative;
 
       display: flex;
       flex-direction: row;
+      justify-content: center;
       align-items: center;
 
       .yd-tab{
-        width: 63%;
-        margin-left: 12%;
+        width: 57%;
       }
       .mint-button{
         font-size: 12px;
@@ -166,14 +166,13 @@
         border-radius: 7px;
       }
       .mui-btn-block{
-        width: 20%;
+        width: 16%;
         height: 30px;
-        border-radius: 5px;
-        box-shadow: 1px 1px 2px #e2e2e2;
-        position: relative;
+        border-radius: 7px;
+        border: 1px solid rgba(2, 167, 240, 0.7) !important;
         padding: 0;
         line-height: 30px;
-        font-size: 12px;
+        font-size: 11px;
         position: absolute;
         right: 10px;
         text-align: center;

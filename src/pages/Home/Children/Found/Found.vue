@@ -182,6 +182,7 @@
             h1 {
               padding-left: 5px;
               font-size: 16px;
+              margin-bottom: 4px;
             }
             .mui-ellipsis {
               font-size: 13px;
@@ -193,6 +194,8 @@
               width: 100%;
               .post-time{
                 text-align: right;
+                font-size: 12px;
+                color: rgba(143, 143, 148, 0.6);
               }
             }
           }
