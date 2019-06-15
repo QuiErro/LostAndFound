@@ -16,6 +16,7 @@
               <h1>{{userInfo.username}}</h1>
               <h1>{{ userInfo.student_id || '未绑定学号' }}</h1>
               <h1>{{ userInfo.email }}</h1>
+             <!-- <h1>{{ userInfo.phone || '未绑定手机号' }}</h1> -->
               <p class='mui-ellipsis'>
                 <router-link to="/detail" tag="span"><i class="mui-icon mui-icon-compose"></i>编辑个人资料<i class="mui-icon mui-icon-forward"></i></router-link>
               </p>

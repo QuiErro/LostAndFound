@@ -4,10 +4,12 @@
     <yd-cell-item>
       <span slot="left"></span>
       <yd-input  slot="right" required :debug="true" regex="email" placeholder="请输入邮箱" v-model="email" ref="emailInput"></yd-input>
+      <!--<yd-input  slot="right" required :debug="true" regex="mobile" placeholder="请输入手机号码" v-model="phone" ref="phoneInput"></yd-input>-->
     </yd-cell-item>
     <yd-cell-item>
       <span slot="left"></span>
       <yd-input slot="right" placeholder="请输入邮箱验证码" v-model="code"></yd-input>
+      <!--<yd-input slot="right" placeholder="请输入手机验证码" v-model="code"></yd-input>-->
       <yd-sendcode slot="right"
         @click.native="sendCode"
         v-model="start"
@@ -32,15 +34,16 @@
 </template>
 
 <script>
-  import {getEmailCode, emailCodeRegister} from './../../api/index';
+  import {getEmailCode, emailCodeRegister, phoneCodeRegister, getPhoneCode} from './../../api/index';
 
   export default {
     name: "Register",
     data() {
       return {
         start: false,  // 控制获取验证码的倒计时
-        type: 0, // 方式：邮箱注册
+        type: 0, // 方式：0--邮箱注册  1--手机注册
         email: '',  // 注册邮箱
+        phone: '',  // 注册手机号
         code: null,  // 邮箱验证码
         student_id: '',  // 学号
         password: '',  // 密码
@@ -55,9 +58,12 @@
         this.$router.replace('/login');
       },
       async register(){
-        if(this.$refs.emailInput.valid && this.code && this.password){
+         if(this.$refs.emailInput.valid && this.code && this.password){
+        //if(this.$refs.phoneInput.valid && this.code && this.password){
           this.code = Number(this.code);
           const result = await emailCodeRegister(this.type, this.email, this.code, this.student_id, this.password);
+        //  const result = await phoneCodeRegister(this.type, this.phone, this.code, this.student_id, this.password);
+          console.log(result);
           if(result.error_code === 0){
             this.$dialog.toast({
               mes: '注册成功!请登录',
@@ -69,6 +75,7 @@
             }, 1000);
             this.start = false;
             this.email = '';
+            this.phone = '';
             this.code = null;
             this.student_id = '';
             this.password = '';
@@ -90,12 +97,14 @@
       async sendCode() {
         if(this.$refs.emailInput.valid){
           // 邮箱格式正确
+      //  if(this.$refs.phoneInput.valid){
+          // 手机格式正确
           this.$dialog.loading.open('发送中...');
           const result = await getEmailCode(this.email);
+         // const result = await getPhoneCode(this.phone);
           console.log(result);
           this.start = true;
           this.$dialog.loading.close();
-         // console.log(result);
           if(result.error_code === 0){
             this.$dialog.toast({
               mes: '已发送',
@@ -110,9 +119,10 @@
             });
           }
         }else{
-          // 邮箱格式错误
+          // 邮箱或手机格式错误
           this.$dialog.toast({
             mes: '邮箱' + this.$refs.emailInput.errorMsg,
+           //  mes: '手机号' + this.$refs.phoneInput.errorMsg,
             icon: 'error',
             timeout: 1000
           });

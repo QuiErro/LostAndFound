@@ -7,10 +7,10 @@
       </span>
     </mt-header>
     <div class="goods-content">
-      <div class="post-img" v-if="selected_lost_goods.picture">
+      <div class="post-img" v-if="showImage && selected_lost_goods.picture">
         <yd-slider autoplay="2500" speed="1000">
-          <yd-slider-item v-for="(picture, index) in selected_lost_goods.picture" :key="index">
-            <img :src="'http://47.112.10.160:3389/image/' + selected_lost_goods.picture[index]">
+          <yd-slider-item v-for="(pic, index) in selected_lost_goods.picture" :key="index">
+            <img :src="'http://47.112.10.160:3389/image/' + pic">
           </yd-slider-item>
         </yd-slider>
       </div>
@@ -44,7 +44,9 @@
     data() {
       return {
         lat: 0,
-        lng: 0
+        lng: 0,
+        map: null,
+        showImage: true,
       }
     },
     computed:{
@@ -56,16 +58,23 @@
       this.baiduMap();
     },
     watch:{
-      selected_lost_goods(){
-        this.lat = this.selected_lost_goods.latitude;
-        this.lng = this.selected_lost_goods.longitude;
-        this.baiduMap();
+      $route(){
+        if(this.$route.path.includes('/mypostlostgoods')){
+          if(this.selected_lost_goods.picture){
+            this.showImage = true;
+          }
+          this.lat = this.selected_lost_goods.latitude;
+          this.lng = this.selected_lost_goods.longitude;
+          this.map = null;
+          this.baiduMap();
+        }
       }
     },
     methods: {
       ...mapActions(['reqUserLostPost', 'reqLost',]),
       goBack() {
         // 点击后退
+        this.showImage = false;
         this.$router.go(-1);
       },
       close_post(item_id){
@@ -95,30 +104,31 @@
         }
       },
       baiduMap () {
-        var map = new BMap.Map('allmap');
-        var point = new BMap.Point(this.lng, this.lat);
-				map.centerAndZoom(point, 17);
-				map.addControl(new BMap.MapTypeControl({
+        this.map = new BMap.Map('allmap');
+        let point = new BMap.Point(this.lng, this.lat);
+				this.map.centerAndZoom(point, 17);
+				this.map.addControl(new BMap.MapTypeControl({
 					mapTypes: [
 						BMAP_NORMAL_MAP,
 						BMAP_HYBRID_MAP
 					]
-				}));
-				map.setCurrentCity("福州");
-				map.enableScrollWheelZoom(true);
-				var marker =new BMap.Marker(point)// 创建标注
-        map.addOverlay(marker)// 将标注添加到地图中
+        }));
+        let _this = this;
+				this.map.setCurrentCity("福州");
+				this.map.enableScrollWheelZoom(true);
+				let marker =new BMap.Marker(point)// 创建标注
+        this.map.addOverlay(marker)// 将标注添加到地图中
         // 触摸移动时触发此事件 此时开启可以拖动。虽然刚初始化该地图不可以拖动，但是可以触发拖动事件。
-				map.addEventListener("touchmove", function (e) {
-				  map.enableDragging();
+				this.map.addEventListener("touchmove", function (e) {
+				  _this.map.enableDragging();
 				});
 				// 触摸结束时触发次此事件  此时开启禁止拖动
-				map.addEventListener("touchend", function (e) {
-				  map.disableDragging();
+				this.map.addEventListener("touchend", function (e) {
+				  _this.map.disableDragging();
 				});
 
 				// 初始化地图 禁止拖动   注：虽禁止拖动，但是可以出发拖动事件
-				map.disableDragging();
+				this.map.disableDragging();
 			},
     }
   }
@@ -145,7 +155,7 @@
       padding: 60px 10px 0;
       .post-img{
         height: 45%;
-        margin-bottom: 20px;
+        margin-top: 5px;
         div{
           height: 100%;
           img{
@@ -160,12 +170,13 @@
         }
       }
       .post-basic{
-        margin: 10px 0;
+        margin: 15px 0;
+        padding: 10px 5px 5px;
         width: 100%;
-        height: 25%;
+        height: auto;
         background: #fff;
         border-radius: 7px;
-        box-shadow: 1px 1px 4px #dfdfdf;
+        box-shadow: 2px 2px 5px #D9D9D9;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -174,9 +185,13 @@
           flex-direction: row;
           font-size: 12px;
           margin-left: 8px;
+          margin-bottom: 5px;
           h4{
             font-weight: bolder;
             margin-right: 10px;
+            font-size: 12px;
+          }
+          span{
             font-size: 12px;
           }
         }

@@ -146,12 +146,15 @@
   .goods-list{
     padding: 15px 10px;
     .mui-table-view:before{
-      background: #ffffff !important;
+      background: #f5f5f5 !important;
+    }
+    .mui-table-view:after{
+      background: #f5f5f5 !important;
     }
     .mui-table-view {
       background: #F5F5F5;
       .mui-table-view-cell:after{
-        background: #ffffff;
+        background: #f5f5f5;
       }
       li {
         margin: 0 5px 10px;
@@ -163,9 +166,10 @@
           display: flex;
           flex-direction: row;
           .mui-media-object.mui-pull-left{
-            max-width: 32% !important;
-            width: 32%;
-            height: 30%;
+            max-width: 90px !important;
+            width: 90px;
+            height: 90px;
+            max-height: 90px !important;
             margin-right: 20px;
           }
           .mui-media-body{
@@ -173,7 +177,7 @@
             flex: 1;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
+            align-items: flex-between;
             h1 {
               padding-left: 5px;
               font-size: 16px;

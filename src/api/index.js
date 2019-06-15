@@ -6,11 +6,20 @@ const BASE_URL = 'http://47.112.10.160:3389'; // 服务器真实地址
 // 请求邮箱验证码
 export const getEmailCode = (email) => ajax(BASE_URL + '/api/register_email_code', {email}, 'POST');
 
+// 请求手机验证码
+export const getPhoneCode = (phone) => ajax(BASE_URL + '/api/register_phone_code', {phone}, 'POST');
+
 // 邮箱验证码注册
 export const emailCodeRegister = (type, email, code, student_id, password) => ajax(BASE_URL + '/api/register', {type, email, code, student_id, password}, 'POST');
 
-// 邮箱或手机登录
+// 手机验证码注册
+export const phoneCodeRegister = (type, phone, code, student_id, password) => ajax(BASE_URL + '/api/register', {type, phone, code, student_id, password}, 'POST');
+
+// 邮箱或学号登录
 export const pwdLogin = (params) => ajax(BASE_URL + '/api/login', params, 'POST');
+
+// 手机或学号登录
+export const phonePwdLogin = (params) => ajax(BASE_URL + '/api/login', params, 'POST');
 
 // 发表失物
 export const postFound = (params) => ajax(BASE_URL + '/api/new_found', params, 'POST');
@@ -27,14 +36,20 @@ export const getAllLost = () => ajax(BASE_URL + '/api/all_lost');
 // 获取用户信息
 export const getUserInfo = (id) => ajax(BASE_URL + '/api/user/' + id + '/info');
 
-// 邮箱验证码注册
+// 用户普通信息修改
 export const userEdit = (username, student_id) => ajax(BASE_URL + '/api/user_edit', {username, student_id}, 'POST');
 
 // 请求修改邮箱时的验证码
 export const getEditEmailCode = (email) => ajax(BASE_URL + '/api/get_update_email_code', {email}, 'POST');
 
+// 请求修改手机时的验证码
+export const getEditPhoneCode = (phone) => ajax(BASE_URL + '/api/get_update_phone_code', {phone}, 'POST');
+
 // 修改邮箱
 export const emailChange = (email, code) => ajax(BASE_URL + '/api/update_email', {email, code}, 'POST');
+
+// 修改手机
+export const phoneChange = (phone, code) => ajax(BASE_URL + '/api/update_phone', {phone, code}, 'POST');
 
 // 修改头像
 export const photoChange = (params) => ajax(BASE_URL + '/api/update_photo', params, 'POST');

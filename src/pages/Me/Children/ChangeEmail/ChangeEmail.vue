@@ -10,10 +10,12 @@
       <yd-cell-item>
         <span slot="left"></span>
         <yd-input slot="right" required :debug="true" regex="email" placeholder="请输入邮箱" v-model="email" ref="emailInput"></yd-input>
+      <!--<yd-input  slot="right" required :debug="true" regex="mobile" placeholder="请输入手机号码" v-model="phone" ref="phoneInput"></yd-input> -->
       </yd-cell-item>
       <yd-cell-item>
         <span slot="left"></span>
         <yd-input slot="right" placeholder="请输入邮箱验证码" v-model="code"></yd-input>
+         <!--<yd-input slot="right" placeholder="请输入手机验证码" v-model="code"></yd-inputyd-input> -->
         <yd-sendcode
           slot="right"
           @click.native="sendCode"
@@ -30,7 +32,7 @@
 </template>
 
 <script>
-  import {getEditEmailCode, emailChange} from './../../../../api/index';
+  import {getEditEmailCode, emailChange, getEditPhoneCode, phoneChange} from './../../../../api/index';
   import { MessageBox } from 'mint-ui';
   import {mapState} from 'vuex';
   import {mapActions} from 'vuex'
@@ -40,6 +42,7 @@
     data() {
       return {
         email: '',
+        phone: '',
         code: null,
         start: false,  // 控制获取验证码的倒计时
       }
@@ -56,8 +59,11 @@
       async sendCode() {
         if(this.$refs.emailInput.valid){
           // 邮箱格式正确
+       // if(this.$refs.phoneInput.valid){
+          // 手机格式正确
           this.$dialog.loading.open('发送中...');
           const result = await getEditEmailCode(this.email);
+        //  const result = await getEditPhoneCode(this.phone);
           console.log(result);
           this.start = true;
           this.$dialog.loading.close();
@@ -76,9 +82,10 @@
             this.start = false;
           }
         }else{
-          // 邮箱格式错误
+          // 邮箱/手机格式错误
           this.$dialog.toast({
             mes: '邮箱' + this.$refs.emailInput.errorMsg,
+           // mes: '手机' + this.$refs.phoneInput.errorMsg,
             icon: 'error',
             timeout: 1000
           });
@@ -86,8 +93,10 @@
       },
       async editEmail(){
         if(this.$refs.emailInput.valid && this.code){
+       //  if(this.$refs.phoneInput.valid && this.code){
           this.code = Number(this.code);
           const result = await emailChange(this.email, this.code);
+         // const result = await phoneChange(this.phone, this.code);
           if(result.error_code === 0){
             this.$dialog.toast({
               mes: '修改成功!',
@@ -95,12 +104,14 @@
               timeout: 1000
             });
             this.userInfo.email = this.email;
+          //  this.userInfo.phone = this.phone;
             this.syncUserInfo(this.userInfo);
             setTimeout(()=>{
               this.$router.replace('/me');
             }, 1000);
             this.start = false;
             this.email = '';
+            this.phone = '';
             this.code = null;
           }else{
             this.$dialog.toast({

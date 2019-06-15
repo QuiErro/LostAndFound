@@ -6,6 +6,7 @@
     <div class="login-header">
       <a href="javascript:;" :class="{current: loginMode}" @click="dealLoginMode(true)">学号登录</a>
       <a href="javascript:;" :class="{current: !loginMode}" @click="dealLoginMode(false)">邮箱登录</a>
+     <!-- <a href="javascript:;" :class="{current: !loginMode}" @click="dealLoginMode(false)">手机登录</a> -->
     </div>
     <yd-cell-item v-if="loginMode">
       <span slot="left"></span>
@@ -14,6 +15,7 @@
     <yd-cell-item v-else>
       <span slot="left"></span>
       <yd-input slot="right" required :debug="true" regex="email" placeholder="请输入邮箱" v-model="email" ref="emailInput"></yd-input>
+      <!-- <yd-input slot="right" required :debug="true" regex="mobile" placeholder="请输入手机号" v-model="phone" ref="phoneInput"></yd-input> -->
     </yd-cell-item>
     <yd-cell-item>
       <span slot="left"></span>
@@ -25,15 +27,16 @@
 </template>
 
 <script>
-  import {pwdLogin} from './../../api/index';
+  import {pwdLogin, phonePwdLogin} from './../../api/index';
   import {mapActions} from 'vuex'
   export default {
     name: "Login",
     data() {
       return {
-        loginMode: true, // 登录方式, true 学号登录  false 邮箱登录
-        type: 1, // post登录方式  1 学号  0 邮箱
+        loginMode: true, // 登录方式, true 学号登录  false 邮箱/手机登录
+        type: 1, // post登录方式  1 学号  0 邮箱  2 手机
         email: '',  // 邮箱
+        phone: '',
         password: '', // 密码
         student_id: '', // 学号
         userInfo: {}, // 用户信息
@@ -48,8 +51,11 @@
       async login(){
         if(this.type === 0 && !this.$refs.emailInput.valid){
           // 邮箱格式错误
+       // if(this.type === 2 && !this.$refs.phoneInput.valid){
+          // 手机格式错误
           this.$dialog.toast({
             mes: '邮箱' + this.$refs.emailInput.errorMsg,
+          //  mes: '手机' + this.$refs.phoneInput.errorMsg,
             icon: 'error',
             timeout: 1000
           });
@@ -66,7 +72,7 @@
             timeout: 1000
           });
         }else{
-          if(this.type){
+          if(this.type === 1){
             // 学号登录
             const result = await pwdLogin({
               type: this.type,
@@ -89,11 +95,18 @@
               email: this.email,
               password: this.password
             });
+            // 手机登录
+           /** const result = await phonePwdLogin({
+              type: this.type,
+              email: this.phone,
+              password: this.password
+            }); */
+            console.log(result);
             if(result.error_code === 0){
               this.userInfo = result.data;
             }else{
               this.$dialog.toast({
-                mes: result.error_msg,
+                mes: result.error_msg || '登录失败',
                 icon: 'error',
                 timeout: 1000
               });
@@ -109,6 +122,7 @@
             this.syncUserInfo(this.userInfo);
             this.$router.replace('/home');
             this.email = '';
+            this.phone = '';
             this.code = null;
             this.student_id = '';
             this.password = '';

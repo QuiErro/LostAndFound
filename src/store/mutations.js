@@ -88,11 +88,23 @@ export default {
   },
 
   [OTHER_USER_FOUND_CONTENT](state, {otheruserFoundContent}) {
-    state.otheruserFoundContent = otheruserFoundContent;
+    let otherContent = [];
+    otheruserFoundContent.forEach((item)=>{
+      if(!item.found){
+        otherContent.push(item);
+      }
+    });
+    state.otheruserFoundContent = otherContent;
   },
 
   [OTHER_USER_LOST_CONTENT](state, {otheruserLostContent}) {
-    state.otheruserLostContent = otheruserLostContent;
+    let otherContent = [];
+    otheruserLostContent.forEach((item)=>{
+      if(!item.found){
+        otherContent.push(item);
+      }
+    });
+    state.otheruserLostContent = otherContent;
   },
 
   [SELECTED_LOST_GOODS](state, {goods}) {
