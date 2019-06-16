@@ -96,6 +96,7 @@
        //  if(this.$refs.phoneInput.valid && this.code){
           this.code = Number(this.code);
           const result = await emailChange(this.email, this.code);
+          console.log(result);
          // const result = await phoneChange(this.phone, this.code);
           if(result.error_code === 0){
             this.$dialog.toast({

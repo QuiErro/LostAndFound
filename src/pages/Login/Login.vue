@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="back-icon"><span @click="goBack"><i class="mui-icon mui-icon-back"></i></span></div>
-    <div class="login-title">欢迎使用XX</div>
+    <div class="login-title">欢迎使用失物招领平台</div>
     <!--面板标题-->
     <div class="login-header">
       <a href="javascript:;" :class="{current: loginMode}" @click="dealLoginMode(true)">学号登录</a>
@@ -157,7 +157,7 @@
       width: 100%;
       height: 20%;
       padding: 30px 30px 0;
-      font-size: 24px;
+      font-size: 20px;
       font-style: oblique;
     }
     .login-header{

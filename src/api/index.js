@@ -1,6 +1,6 @@
 import ajax from './ajax'
 
-//const BASE_URL = '/api'; // 解决跨域
+// const BASE_URL = '/api'; // 解决跨域
 const BASE_URL = 'http://47.112.10.160:3389'; // 服务器真实地址
 
 // 请求邮箱验证码

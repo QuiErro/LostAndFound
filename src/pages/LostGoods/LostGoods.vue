@@ -29,7 +29,7 @@
       <div id="allmap"></div>
       <div class="post-detail">
         <h4>详细信息</h4>
-        <div>{{selected_goods.info}}</div>
+        <div>{{selected_goods.info || '暂无'}}</div>
       </div>
       <div class="post-time"><span>发布时间：{{selected_goods.create_time}}</span></div>
       <div class="post-btn" v-if="selected_goods.found"><mt-button type="danger" size="small" disabled>已关闭</mt-button></div>
